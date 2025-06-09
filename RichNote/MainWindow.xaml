@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Window
+    x:Class="RichNote.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:RichNote"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="RichNote"
+    mc:Ignorable="d">
+
+    <Window.SystemBackdrop>
+        <MicaBackdrop/>
+    </Window.SystemBackdrop>
+
+    <Grid x:Name="RootGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid
+            x:Name="AppTitleBar"
+            Grid.Row="0"
+            Height="32"
+            Background="SteelBlue">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Background="LightSteelBlue">
+                <Image
+                    Width="32"
+                    Height="32"
+                    Margin="0,0,0,0"
+                    Source="/Assets/temp_icon.png"/>
+            </Border>
+
+            <Border
+                Grid.Column="1"
+                Padding="6,6,7,0"
+                Background="LightSteelBlue"
+                CornerRadius="0, 0, 10, 0">
+                <TextBlock
+                    x:Name="TitleBarTextBlock"
+                    VerticalAlignment="Center"
+                    Foreground="Black"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
+                    Text="RichNote"/>
+            </Border>
+
+            <MenuBar
+                Grid.Column="2"
+                Background="SteelBlue"
+                RequestedTheme="Dark">
+                <MenuBarItem Title="File">
+                    <MenuFlyoutItem Click="MenuBarItem_FileClick" Text="Open...">
+                        <MenuFlyoutItem.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="O" Modifiers="Control"/>
+                        </MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
+                    <MenuFlyoutItem Click="MenuBarItem_FileClick" Text="Save">
+                        <MenuFlyoutItem.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="S" Modifiers="Control"/>
+                        </MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
+                    <MenuFlyoutItem Click="MenuBarItem_FileClick" Text="Save As...">
+                        <MenuFlyoutItem.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="S" Modifiers="Control, Shift"/>
+                        </MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
+                    <MenuFlyoutSeparator/>
+                    <MenuFlyoutItem Click="MenuBarItem_FileClick" Text="Settings"/>
+                    <MenuFlyoutItem Click="MenuBarItem_FileClick" Text="Quit">
+                        <MenuFlyoutItem.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="Q" Modifiers="Control"/>
+                        </MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
+                </MenuBarItem>
+                <MenuBarItem Title="Edit">
+                    <MenuFlyoutItem Click="MenuBarItem_EditClick" Text="Find">
+                        <MenuFlyoutItem.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="F" Modifiers="Control"/>
+                        </MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
+                    <MenuFlyoutItem Click="MenuBarItem_EditClick" Text="Replace">
+                        <MenuFlyoutItem.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="H" Modifiers="Control"/>
+                        </MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
+                    <MenuFlyoutSeparator/>
+                    <MenuFlyoutItem Click="MenuBarItem_EditClick" Text="Select All">
+                        <MenuFlyoutItem.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="A" Modifiers="Control"/>
+                        </MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
+                    <MenuFlyoutItem Click="MenuBarItem_EditClick" Text="Insert Date and Time"/>
+                </MenuBarItem>
+                <MenuBarItem Title="Format">
+                    <ToggleMenuFlyoutItem Click="MenuBarItem_FormatClick" Text="Word Wrap"/>
+                    <MenuFlyoutItem Click="MenuBarItem_FormatClick" Text="Font..."/>
+                </MenuBarItem>
+                <MenuBarItem Title="About">
+                    <MenuFlyoutItem Click="MenuBarItem_AboutClick" Text="About"/>
+                    <MenuFlyoutItem Click="MenuBarItem_AboutClick" Text="About RichNote"/>
+                </MenuBarItem>
+            </MenuBar>
+        </Grid>
+
+        <TabView
+            Grid.Row="1"
+            VerticalAlignment="Stretch"
+            AddTabButtonClick="TabView_NewDoc"
+            Background="SteelBlue"
+            CanReorderTabs="True"
+            IsAddTabButtonVisible="True"
+            RequestedTheme="Light"
+            TabCloseRequested="TabView_CloseDoc">
+            <TabView.Resources>
+                <SolidColorBrush x:Key="TabViewItemHeaderBackgroundSelected" Color="WhiteSmoke"/>
+                <SolidColorBrush x:Key="TabViewButtonBackground" Color="LightSteelBlue"/>
+                <SolidColorBrush x:Key="TabViewButtonForeground" Color="Black"/>
+            </TabView.Resources>
+            <TabViewItem Header="New Document" IsClosable="True">
+                <TabViewItem.IconSource>
+                    <SymbolIconSource Symbol="Page2"/>
+                </TabViewItem.IconSource>
+                <TabViewItem.Content>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <CommandBar
+                            Grid.Row="0"
+                            AllowFocusOnInteraction="False"
+                            Background="WhiteSmoke"
+                            DefaultLabelPosition="Right"
+                            FlowDirection="RightToLeft"
+                            IsOpen="False"
+                            RequestedTheme="Light">
+                            <CommandBar.PrimaryCommands>
+                                <AppBarButton Icon="ZoomOut" ToolTipService.ToolTip="Zoom Out (Ctrl-Minus)"/>
+                                <AppBarButton Icon="ZoomIn" ToolTipService.ToolTip="Zoom In (Ctrl+Plus)"/>
+                                <!--<AppBarSeparator/>
+                                <AppBarButton Icon="Rename" ToolTipService.ToolTip="Find and Replace (Ctrl+H)"/>
+                                <AppBarButton Icon="Find" ToolTipService.ToolTip="Find (Ctrl+F)"/>-->
+                                <AppBarSeparator/>
+                                <AppBarButton Icon="Redo" ToolTipService.ToolTip="Redo (Ctrl+Y)"/>
+                                <AppBarButton Icon="Undo" ToolTipService.ToolTip="Undo (Ctrl+Z)"/>
+                                <AppBarSeparator/>
+                                <AppBarElementContainer>
+                                    <TextBlock
+                                        Padding="20,10,20,0"
+                                        FontSize="24"
+                                        Style="{StaticResource BodyTextBlockStyle}"
+                                        Text="TXT"
+                                        ToolTipService.ToolTip="Document Format"/>
+                                </AppBarElementContainer>
+                            </CommandBar.PrimaryCommands>
+                        </CommandBar>
+
+                        <RichEditBox
+                            Grid.Row="1"
+                            VerticalAlignment="Stretch"
+                            BorderThickness="0"
+                            CornerRadius="0"
+                            DisabledFormattingAccelerators="All">
+                            <RichEditBox.Resources>
+                                <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="White"/>
+                                <SolidColorBrush x:Key="TextControlBackground" Color="White"/>
+                                <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="White"/>
+                            </RichEditBox.Resources>
+                            <RichEditBox.ContextFlyout>
+                                <Flyout>
+                                    <MenuFlyoutItem Text="Options disabled"/>
+                                </Flyout>
+                            </RichEditBox.ContextFlyout>
+                        </RichEditBox>
+                    </Grid>
+                </TabViewItem.Content>
+            </TabViewItem>
+        </TabView>
+
+        <!--  Status bar  -->
+        <CommandBar
+            Grid.Row="2"
+            Height="25"
+            VerticalAlignment="Bottom"
+            AllowFocusOnInteraction="False"
+            Background="SteelBlue"
+            DefaultLabelPosition="Right"
+            FlowDirection="RightToLeft"
+            IsOpen="False">
+            <CommandBar.Content>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        x:Name="CharEncodingType"
+                        Padding="5,5,25,0"
+                        Text="UTF-8"
+                        ToolTipService.ToolTip="Character Encoding"/>
+                    <TextBlock
+                        x:Name="LineBreakType"
+                        Padding="30,5,100,0"
+                        Text="Windows (CRLF)"
+                        ToolTipService.ToolTip="Line Break Type"/>
+                    <TextBlock
+                        x:Name="PgZoomPcnt"
+                        Padding="100,5,75,0"
+                        Text="Zoom: 100%"/>
+                    <TextBlock
+                        x:Name="LineAndCol"
+                        Padding="100,5,75,0"
+                        Text="Line 1, Col 1"/>
+                </StackPanel>
+            </CommandBar.Content>
+        </CommandBar>
+
+
+        <!--  About RichNote dialog  -->
+        <ContentDialog
+            x:Name="aboutDialog"
+            CloseButtonText="OK"
+            RequestedTheme="Dark">
+            <ContentDialog.TitleTemplate>
+                <DataTemplate>
+                    <StackPanel Padding="0,0,0,5" Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal">
+                            <Image
+                                Width="100"
+                                Height="100"
+                                Margin="0,0,25,0"
+                                Source="/Assets/temp_icon.png"/>
+                            <StackPanel VerticalAlignment="Stretch" Orientation="Vertical">
+                                <TextBlock Style="{StaticResource TitleLargeTextBlockStyle}" Text="RichNote"/>
+                                <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Version INDEV"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ContentDialog.TitleTemplate>
+            <StackPanel>
+                <TextBlock
+                    Padding="0,0,0,10"
+                    Text="RichNote is a basic tabbed note editor inspired by Windows 11's Notepad."
+                    TextWrapping="WrapWholeWords"/>
+                <TextBlock
+                    Padding="0,0,0,10"
+                    Text="Not only is it capable of standard text editing, but it also supports most basic rich text formatting."
+                    TextWrapping="WrapWholeWords"/>
+                <HyperlinkButton
+                    HorizontalAlignment="Center"
+                    Content="GitHub Repository"
+                    NavigateUri="https://www.google.com"/>
+            </StackPanel>
+        </ContentDialog>
+
+        <!--  About SDK dialog  -->
+        <ContentDialog
+            x:Name="aboutSDKDialog"
+            CloseButtonText="OK"
+            RequestedTheme="Dark">
+            <ContentDialog.TitleTemplate>
+                <DataTemplate>
+                    <StackPanel Padding="0,30,0,15" Orientation="Vertical">
+                        <StackPanel Padding="0,0,0,30" Orientation="Horizontal">
+                            <Image
+                                Width="100"
+                                Height="100"
+                                Margin="0,0,25,0"
+                                Source="/Assets/appsdk_logo.png"/>
+                            <StackPanel VerticalAlignment="Stretch" Orientation="Vertical">
+                                <TextBlock Style="{StaticResource TitleLargeTextBlockStyle}" Text="Windows App SDK"/>
+                                <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Version 1.7.2"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Image
+                                Width="100"
+                                Height="100"
+                                Margin="0,0,25,0"
+                                Source="/Assets/winui_logo.png"/>
+                            <StackPanel VerticalAlignment="Stretch" Orientation="Vertical">
+                                <TextBlock Style="{StaticResource TitleLargeTextBlockStyle}" Text="WinUI"/>
+                                <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Version 3"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ContentDialog.TitleTemplate>
+        </ContentDialog>
+
+        <!--  General activity notification  -->
+        <TeachingTip
+            x:Name="ActivityNotif"
+            CloseButtonContent="OK"
+            IsLightDismissEnabled="True"
+            PlacementMargin="10"
+            PreferredPlacement="Bottom"
+            RequestedTheme="Dark"/>
+
+        <!--  New document format selector  -->
+        <TeachingTip
+            x:Name="SelectDocFormat"
+            Title="Create which document format?"
+            ActionButtonContent="Text"
+            CloseButtonContent="Rich Text"
+            IsLightDismissEnabled="True"
+            PlacementMargin="50"
+            PreferredPlacement="Top"
+            RequestedTheme="Dark"
+            Subtitle="Text only allows text, while Rich Text allows more advanced features like images and formatting."/>
+    </Grid>
+</Window>

@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "RichNote (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "RichNote (Unpackaged)": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "XLP_USE_PRINTWINDOW": "1"
+      }
+    }
+  }
+}
