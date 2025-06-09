@@ -124,66 +124,12 @@
                 <SolidColorBrush x:Key="TabViewItemHeaderBackgroundSelected" Color="WhiteSmoke"/>
                 <SolidColorBrush x:Key="TabViewButtonBackground" Color="LightSteelBlue"/>
                 <SolidColorBrush x:Key="TabViewButtonForeground" Color="Black"/>
+                <x:String x:Key="DefaultNewTabHeader">New Document</x:String>
             </TabView.Resources>
             <TabViewItem Header="New Document" IsClosable="True">
                 <TabViewItem.IconSource>
                     <SymbolIconSource Symbol="Page2"/>
                 </TabViewItem.IconSource>
-                <TabViewItem.Content>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-
-                        <CommandBar
-                            Grid.Row="0"
-                            AllowFocusOnInteraction="False"
-                            Background="WhiteSmoke"
-                            DefaultLabelPosition="Right"
-                            FlowDirection="RightToLeft"
-                            IsOpen="False"
-                            RequestedTheme="Light">
-                            <CommandBar.PrimaryCommands>
-                                <AppBarButton Icon="ZoomOut" ToolTipService.ToolTip="Zoom Out (Ctrl-Minus)"/>
-                                <AppBarButton Icon="ZoomIn" ToolTipService.ToolTip="Zoom In (Ctrl+Plus)"/>
-                                <!--<AppBarSeparator/>
-                                <AppBarButton Icon="Rename" ToolTipService.ToolTip="Find and Replace (Ctrl+H)"/>
-                                <AppBarButton Icon="Find" ToolTipService.ToolTip="Find (Ctrl+F)"/>-->
-                                <AppBarSeparator/>
-                                <AppBarButton Icon="Redo" ToolTipService.ToolTip="Redo (Ctrl+Y)"/>
-                                <AppBarButton Icon="Undo" ToolTipService.ToolTip="Undo (Ctrl+Z)"/>
-                                <AppBarSeparator/>
-                                <AppBarElementContainer>
-                                    <TextBlock
-                                        Padding="20,10,20,0"
-                                        FontSize="24"
-                                        Style="{StaticResource BodyTextBlockStyle}"
-                                        Text="TXT"
-                                        ToolTipService.ToolTip="Document Format"/>
-                                </AppBarElementContainer>
-                            </CommandBar.PrimaryCommands>
-                        </CommandBar>
-
-                        <RichEditBox
-                            Grid.Row="1"
-                            VerticalAlignment="Stretch"
-                            BorderThickness="0"
-                            CornerRadius="0"
-                            DisabledFormattingAccelerators="All">
-                            <RichEditBox.Resources>
-                                <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="White"/>
-                                <SolidColorBrush x:Key="TextControlBackground" Color="White"/>
-                                <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="White"/>
-                            </RichEditBox.Resources>
-                            <RichEditBox.ContextFlyout>
-                                <Flyout>
-                                    <MenuFlyoutItem Text="Options disabled"/>
-                                </Flyout>
-                            </RichEditBox.ContextFlyout>
-                        </RichEditBox>
-                    </Grid>
-                </TabViewItem.Content>
             </TabViewItem>
         </TabView>
 

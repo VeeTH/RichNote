@@ -7,12 +7,12 @@ I decided to create RichNote due to my experiences with the Windows 11 Notepad. 
 
 ### Current features
 * Basic UI
-* Tab controls
+* Separate TXT/RTF editors
 
 ### To-do features
+* Tab controls
 * File handling (opening and saving)
 * Autosaving
-* Separate TXT/RTF editors
 * Text formatting
 * Status bar
 * Settings
@@ -24,4 +24,5 @@ Want to contribute? Pull requests and issues are always open. Fork according to 
 * [.NET 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 
 ### Libraries used
-* UDE.CSharp
+* UDE.CSharp (planned)
+* Json.NET (planned)
