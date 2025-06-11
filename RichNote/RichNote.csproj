@@ -13,6 +13,8 @@
     <Nullable>enable</Nullable>
     <WindowsPackageType>None</WindowsPackageType>
     <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
   </PropertyGroup>
   <ItemGroup>
@@ -21,10 +23,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Assets\temp_icon.png" />
-    <Content Include="Assets\temp_icon.ico" />
-    <Content Include="Assets\appsdk_logo.png" />
-    <Content Include="Assets\winui_logo.png" />
+    <Content Include="Assets\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

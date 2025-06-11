@@ -15,6 +15,7 @@
         </Grid.RowDefinitions>
 
         <CommandBar
+            x:Name="MyEditorCommandBar"
             Grid.Row="0"
             AllowFocusOnInteraction="False"
             Background="WhiteSmoke"
@@ -52,6 +53,7 @@
         </CommandBar>
 
         <RichEditBox
+            x:Name="MyEditorRichEditBox"
             Grid.Row="1"
             VerticalAlignment="Stretch"
             BorderThickness="0"
@@ -64,11 +66,6 @@
                 <SolidColorBrush x:Key="TextControlBackground" Color="White"/>
                 <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="White"/>
             </RichEditBox.Resources>
-            <RichEditBox.ContextFlyout>
-                <Flyout>
-                    <MenuFlyoutItem Text="Options disabled"/>
-                </Flyout>
-            </RichEditBox.ContextFlyout>
         </RichEditBox>
     </Grid>
 </UserControl>

@@ -18,10 +18,14 @@ using Microsoft.UI.Xaml.Navigation;
 
 namespace RichNote;
 
-public sealed partial class RichTextEditor : UserControl
+public sealed partial class RichTextEditor : UserControl, IEditorControl
 {
     public RichTextEditor()
     {
         InitializeComponent();
     }
+
+    public CommandBar EditorCommandBar => MyEditorCommandBar;
+    public RichEditBox? EditorRichEditBox => MyEditorRichEditBox;
+    public TextBox? EditorTextBox => null;
 }

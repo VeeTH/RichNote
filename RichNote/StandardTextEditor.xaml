@@ -15,6 +15,7 @@
         </Grid.RowDefinitions>
 
         <CommandBar
+            x:Name="MyEditorCommandBar"
             Grid.Row="0"
             AllowFocusOnInteraction="False"
             Background="WhiteSmoke"
@@ -25,9 +26,6 @@
             <CommandBar.PrimaryCommands>
                 <AppBarButton Icon="ZoomOut" ToolTipService.ToolTip="Zoom Out (Ctrl-Minus)"/>
                 <AppBarButton Icon="ZoomIn" ToolTipService.ToolTip="Zoom In (Ctrl+Plus)"/>
-                <!--<AppBarSeparator/>
-            <AppBarButton Icon="Rename" ToolTipService.ToolTip="Find and Replace (Ctrl+H)"/>
-            <AppBarButton Icon="Find" ToolTipService.ToolTip="Find (Ctrl+F)"/>-->
                 <AppBarSeparator/>
                 <AppBarButton Icon="Redo" ToolTipService.ToolTip="Redo (Ctrl+Y)"/>
                 <AppBarButton Icon="Undo" ToolTipService.ToolTip="Undo (Ctrl+Z)"/>
@@ -43,23 +41,20 @@
             </CommandBar.PrimaryCommands>
         </CommandBar>
 
-        <RichEditBox
+        <TextBox
+            x:Name="MyEditorTextBox"
             Grid.Row="1"
             VerticalAlignment="Stretch"
+            AcceptsReturn="True"
             BorderThickness="0"
             ContextFlyout="{StaticResource EditorFlyout}"
             CornerRadius="0"
             SelectionFlyout="{StaticResource EditorFlyout}">
-            <RichEditBox.Resources>
+            <TextBox.Resources>
                 <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="White"/>
                 <SolidColorBrush x:Key="TextControlBackground" Color="White"/>
                 <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="White"/>
-            </RichEditBox.Resources>
-            <RichEditBox.ContextFlyout>
-                <Flyout>
-                    <MenuFlyoutItem Text="Options disabled"/>
-                </Flyout>
-            </RichEditBox.ContextFlyout>
-        </RichEditBox>
+            </TextBox.Resources>
+        </TextBox>
     </Grid>
 </UserControl>

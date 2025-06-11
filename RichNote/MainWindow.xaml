@@ -112,6 +112,7 @@
         </Grid>
 
         <TabView
+            x:Name="DocTabView"
             Grid.Row="1"
             VerticalAlignment="Stretch"
             AddTabButtonClick="TabView_NewDoc"
@@ -119,6 +120,7 @@
             CanReorderTabs="True"
             IsAddTabButtonVisible="True"
             RequestedTheme="Light"
+            SelectionChanged="TabView_SelectionChanged"
             TabCloseRequested="TabView_CloseDoc">
             <TabView.Resources>
                 <SolidColorBrush x:Key="TabViewItemHeaderBackgroundSelected" Color="WhiteSmoke"/>
@@ -169,10 +171,7 @@
 
 
         <!--  About RichNote dialog  -->
-        <ContentDialog
-            x:Name="aboutDialog"
-            CloseButtonText="OK"
-            RequestedTheme="Dark">
+        <ContentDialog x:Name="aboutDialog" CloseButtonText="OK">
             <ContentDialog.TitleTemplate>
                 <DataTemplate>
                     <StackPanel Padding="0,0,0,5" Orientation="Horizontal">
@@ -202,15 +201,12 @@
                 <HyperlinkButton
                     HorizontalAlignment="Center"
                     Content="GitHub Repository"
-                    NavigateUri="https://www.google.com"/>
+                    NavigateUri="https://github.com/VeeTH/RichNote"/>
             </StackPanel>
         </ContentDialog>
 
         <!--  About SDK dialog  -->
-        <ContentDialog
-            x:Name="aboutSDKDialog"
-            CloseButtonText="OK"
-            RequestedTheme="Dark">
+        <ContentDialog x:Name="aboutSDKDialog" CloseButtonText="OK">
             <ContentDialog.TitleTemplate>
                 <DataTemplate>
                     <StackPanel Padding="0,30,0,15" Orientation="Vertical">
@@ -247,19 +243,19 @@
             CloseButtonContent="OK"
             IsLightDismissEnabled="True"
             PlacementMargin="10"
-            PreferredPlacement="Bottom"
-            RequestedTheme="Dark"/>
+            PreferredPlacement="Bottom"/>
 
         <!--  New document format selector  -->
         <TeachingTip
             x:Name="SelectDocFormat"
             Title="Create which document format?"
+            ActionButtonClick="SelectDocFormat_ActionButtonClick"
             ActionButtonContent="Text"
+            CloseButtonClick="SelectDocFormat_CloseButtonClick"
             CloseButtonContent="Rich Text"
             IsLightDismissEnabled="True"
             PlacementMargin="50"
             PreferredPlacement="Top"
-            RequestedTheme="Dark"
             Subtitle="Text only allows text, while Rich Text allows more advanced features like images and formatting."/>
     </Grid>
 </Window>

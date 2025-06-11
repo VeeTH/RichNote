@@ -7,10 +7,10 @@ I decided to create RichNote due to my experiences with the Windows 11 Notepad. 
 
 ### Current features
 * Basic UI
+* Tab controls
 * Separate TXT/RTF editors
 
 ### To-do features
-* Tab controls
 * File handling (opening and saving)
 * Autosaving
 * Text formatting
