@@ -36,9 +36,6 @@
                 <AppBarButton Icon="Underline" ToolTipService.ToolTip="Underline (Ctrl+U)"/>
                 <AppBarButton Icon="Italic" ToolTipService.ToolTip="Italics (Ctrl+I)"/>
                 <AppBarButton Icon="Bold" ToolTipService.ToolTip="Bold (Ctrl+B)"/>
-                <!--<AppBarSeparator/>
-            <AppBarButton Icon="Rename" ToolTipService.ToolTip="Find and Replace (Ctrl+H)"/>
-            <AppBarButton Icon="Find" ToolTipService.ToolTip="Find (Ctrl+F)"/>-->
                 <AppBarSeparator/>
                 <AppBarButton Icon="Redo" ToolTipService.ToolTip="Redo (Ctrl+Y)"/>
                 <AppBarButton Icon="Undo" ToolTipService.ToolTip="Undo (Ctrl+Z)"/>
@@ -58,8 +55,10 @@
             Grid.Row="1"
             VerticalAlignment="Stretch"
             BorderThickness="0"
+            ContextFlyout="{StaticResource EditorFlyout}"
             CornerRadius="0"
-            DisabledFormattingAccelerators="All">
+            DisabledFormattingAccelerators="All"
+            SelectionFlyout="{StaticResource EditorFlyout}">
             <RichEditBox.Resources>
                 <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="White"/>
                 <SolidColorBrush x:Key="TextControlBackground" Color="White"/>
