@@ -16,6 +16,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Popups;
 
 namespace RichNote
@@ -33,7 +34,7 @@ namespace RichNote
             ExtendsContentIntoTitleBar = true;          
             SetTitleBar(AppTitleBar);
 
-            StandardNewDoc(1);
+            StandardNewDoc(1, "New Document");
             DocTabView.TabItemsSource = tabItems;
             Closed += MainWindow_Closed;         
         }
@@ -100,12 +101,12 @@ namespace RichNote
         private void SelectDocFormat_ActionButtonClick(TeachingTip sender, object args)
         {
             SelectDocFormat.IsOpen = false;
-            StandardNewDoc(1);
+            StandardNewDoc(1, "New Document");
         }
 
         private void SelectDocFormat_CloseButtonClick(TeachingTip sender, object args)
         {
-            StandardNewDoc(2);
+            StandardNewDoc(2, "New Document");
         }
 
         private void MenuBarItem_AboutClick(object sender, RoutedEventArgs e)
@@ -141,6 +142,10 @@ namespace RichNote
 
                 switch (clickedText)
                 {
+                    case "Open...":
+                        OpenFile();
+                        break;
+                    
                     case "Quit":
                         Environment.Exit(0);
                         break;
@@ -180,7 +185,7 @@ namespace RichNote
         }
 
         // Helper methods
-        private void StandardNewDoc(int format)
+        private void StandardNewDoc(int format, string tabName)
         { 
             switch (format)
             {
@@ -188,7 +193,7 @@ namespace RichNote
                     var tabContent = new StandardTextEditor();
                     var tabItem = new TabViewItem();
                     tabItem.Content = tabContent;
-                    tabItem.Header = "New Document";
+                    tabItem.Header = tabName;
                     tabItem.IconSource = new SymbolIconSource() { Symbol = Symbol.Page2 };
 
                     tabItems.Add(tabItem);
@@ -200,7 +205,7 @@ namespace RichNote
                     var richTabContent = new RichTextEditor();
                     var richTabItem = new TabViewItem();
                     richTabItem.Content = richTabContent;
-                    richTabItem.Header = "New Document";
+                    richTabItem.Header = tabName;
                     richTabItem.IconSource = new SymbolIconSource() { Symbol = Symbol.Page2 };
 
                     tabItems.Add(richTabItem);
@@ -227,6 +232,41 @@ namespace RichNote
             dialog.RequestedTheme = ElementTheme.Dark;
 
             return dialog;
+        }
+
+        private async void OpenFile()
+        {
+            var picker = new Windows.Storage.Pickers.FileOpenPicker();
+            WinRT.Interop.InitializeWithWindow.Initialize(picker, WinRT.Interop.WindowNative.GetWindowHandle(this));
+            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.List;
+            picker.FileTypeFilter.Add(".txt");
+            picker.FileTypeFilter.Add(".rtf");
+
+            StorageFile file = await picker.PickSingleFileAsync();
+
+            if (file != null)
+            {
+                switch (file.FileType)
+                {
+                    case ".txt":
+                        StandardNewDoc(1, file.Name);
+                        var fileContent = await FileIO.ReadTextAsync(file);
+                        currentEditor.EditorTextBox.Text = fileContent;
+                        break;
+
+                    case ".rtf":
+                        StandardNewDoc(2, file.Name);
+                        var stream = await file.OpenAsync(FileAccessMode.Read);
+                        currentEditor.EditorRichEditBox.Document.LoadFromStream(Microsoft.UI.Text.TextSetOptions.FormatRtf, stream);
+                        break;
+
+                    default:
+                        break;
+                }
+            } else
+            {
+                return;
+            }
         }
 
         private void InitializeWindow()
