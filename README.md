@@ -17,11 +17,22 @@ I decided to create RichNote due to my experiences with the Windows 11 Notepad. 
 * Status bar
 * Settings
 
+## Building
+1. Verify you have all the requirements installed.
+
+2. Install Visual Studio 2022 with the "WinUI application development" and ".NET desktop development" workloads.
+
+3. Clone the GitHub repository. 
+
+4. This is an unpackaged app, so make sure the configuration is set to "RichNote (Unpackaged)" before building.
+![](https://i.postimg.cc/9XxMv6ND/Screenshot-9.png)
+
 ## Contributing
 Want to contribute? Pull requests and issues are always open. Fork according to the license.
 
 ### Requirements
 * [.NET 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+* [Windows App SDK 1.7.2](https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/downloads)
 
 ### Libraries used
 * UDE.CSharp (planned)
