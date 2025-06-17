@@ -101,7 +101,10 @@
                     <MenuFlyoutItem Click="MenuBarItem_EditClick" Text="Insert Date and Time"/>
                 </MenuBarItem>
                 <MenuBarItem Title="Format">
-                    <ToggleMenuFlyoutItem Click="MenuBarItem_FormatClick" Text="Word Wrap"/>
+                    <ToggleMenuFlyoutItem
+                        x:Name="ToggleWordWrap"
+                        Click="MenuBarItem_FormatClick"
+                        Text="Word Wrap"/>
                     <MenuFlyoutItem Click="MenuBarItem_FormatClick" Text="Font..."/>
                 </MenuBarItem>
                 <MenuBarItem Title="About">

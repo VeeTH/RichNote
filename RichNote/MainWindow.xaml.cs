@@ -82,11 +82,6 @@ namespace RichNote
                 if (selectedTabItem.Content is IEditorControl editorControl)
                 {
                     currentEditor = editorControl;
-                    //if (currentEditor.EditorRichEditBox != null)
-                    //{
-                    //    currentEditor.EditorRichEditBox.ContextFlyout = null;
-                    //    currentEditor.EditorRichEditBox.SelectionFlyout = null;
-                    //}
                 }
                 else
                 {
@@ -95,6 +90,14 @@ namespace RichNote
             } else
             {
                 currentEditor = null;
+            }
+
+            if (currentEditor.EditorTextBox != null)
+            {
+                ToggleWordWrap.Visibility = Visibility.Visible;
+            } else
+            {
+                ToggleWordWrap.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -178,6 +181,16 @@ namespace RichNote
 
                 switch (clickedText)
                 {
+                    case "Word Wrap":
+                        if (ToggleWordWrap.IsChecked == false)
+                        {
+                            currentEditor.EditorTextBox.TextWrapping = TextWrapping.NoWrap;
+                        } else
+                        {
+                            currentEditor.EditorTextBox.TextWrapping = TextWrapping.Wrap;
+                        }
+                        break;
+                    
                     default:
                         break;
                 }
@@ -191,6 +204,10 @@ namespace RichNote
             {
                 case 1:
                     var tabContent = new StandardTextEditor();
+                    if (ToggleWordWrap.IsChecked == true)
+                    {
+                        tabContent.EditorTextBox.TextWrapping = TextWrapping.Wrap;
+                    }
                     var tabItem = new TabViewItem();
                     tabItem.Content = tabContent;
                     tabItem.Header = tabName;
