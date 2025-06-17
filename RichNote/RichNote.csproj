@@ -13,7 +13,6 @@
     <Nullable>enable</Nullable>
     <WindowsPackageType>None</WindowsPackageType>
     <SelfContained>true</SelfContained>
-    <PublishSingleFile>true</PublishSingleFile>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
   </PropertyGroup>
@@ -54,6 +53,17 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+
+  <Target Name="RemoveMuiFolders" AfterTargets="Build">
+    <ItemGroup>
+      <KeepingLanguages Include="en-US" />
+      <KeepingFiles Include="@(KeepingLanguages->'$(OutDir)%(Identity)\*.mui')"/>
+      <RemovingFiles Include="$(OutDir)*\*.mui" Exclude="@(KeepingFiles)" />
+      <RemovingFolders Include="@(RemovingFiles->'%(RootDir)%(Directory)')" />
+    </ItemGroup>
+
+    <RemoveDir Directories="@(RemovingFolders)" />
+  </Target>
 
   <!--
     Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution
