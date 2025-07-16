@@ -16,10 +16,6 @@
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
   </PropertyGroup>
-  <ItemGroup>
-    <None Remove="RichTextEditor.xaml" />
-    <None Remove="StandardTextEditor.xaml" />
-  </ItemGroup>
 
   <ItemGroup>
     <Content Include="Assets\*.*">
@@ -44,12 +40,17 @@
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.7.250513003" />
   </ItemGroup>
   <ItemGroup>
-    <Page Update="RichTextEditor.xaml">
+    <Page Update="C_SettingsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="StandardTextEditor.xaml">
+    <Page Update="C_RichTextEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="C_StandardTextEditor.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
@@ -57,7 +58,7 @@
   <Target Name="RemoveMuiFolders" AfterTargets="Build">
     <ItemGroup>
       <KeepingLanguages Include="en-US" />
-      <KeepingFiles Include="@(KeepingLanguages->'$(OutDir)%(Identity)\*.mui')"/>
+      <KeepingFiles Include="@(KeepingLanguages->'$(OutDir)%(Identity)\*.mui')" />
       <RemovingFiles Include="$(OutDir)*\*.mui" Exclude="@(KeepingFiles)" />
       <RemovingFolders Include="@(RemovingFiles->'%(RootDir)%(Directory)')" />
     </ItemGroup>
