@@ -92,12 +92,19 @@ namespace RichNote
                 currentEditor = null;
             }
 
-            if (currentEditor.EditorTextBox != null)
+            if (currentEditor != null)
             {
-                ToggleWordWrap.Visibility = Visibility.Visible;
+                if (currentEditor.EditorTextBox != null)
+                {
+                    ToggleWordWrap.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    ToggleWordWrap.Visibility = Visibility.Collapsed;
+                }
             } else
             {
-                ToggleWordWrap.Visibility = Visibility.Collapsed;
+                return;
             }
         }
 
