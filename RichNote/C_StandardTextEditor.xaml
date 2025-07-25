@@ -24,11 +24,39 @@
             IsOpen="False"
             RequestedTheme="Light">
             <CommandBar.PrimaryCommands>
-                <AppBarButton Icon="ZoomOut" ToolTipService.ToolTip="Zoom Out (Ctrl-Minus)"/>
-                <AppBarButton Icon="ZoomIn" ToolTipService.ToolTip="Zoom In (Ctrl+Plus)"/>
+                <AppBarButton
+                    Click="ZoomOut_Click"
+                    Icon="ZoomOut"
+                    ToolTipService.ToolTip="Zoom Out (Ctrl-Minus)">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="Subtract" Modifiers="Control"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+                <AppBarButton
+                    Click="ZoomIn_Click"
+                    Icon="ZoomIn"
+                    ToolTipService.ToolTip="Zoom In (Ctrl+Plus)">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="Add" Modifiers="Control"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
                 <AppBarSeparator/>
-                <AppBarButton Icon="Redo" ToolTipService.ToolTip="Redo (Ctrl+Y)"/>
-                <AppBarButton Icon="Undo" ToolTipService.ToolTip="Undo (Ctrl+Z)"/>
+                <AppBarButton
+                    Click="Redo_Click"
+                    Icon="Redo"
+                    ToolTipService.ToolTip="Redo (Ctrl+Y)">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="Y" Modifiers="Control"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+                <AppBarButton
+                    Click="Undo_Click"
+                    Icon="Undo"
+                    ToolTipService.ToolTip="Undo (Ctrl+Z)">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="Z" Modifiers="Control"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
                 <AppBarSeparator/>
                 <AppBarElementContainer>
                     <TextBlock
