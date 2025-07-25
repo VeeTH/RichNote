@@ -163,7 +163,7 @@
                     <TextBlock
                         x:Name="PgZoomPcnt"
                         Padding="100,5,75,0"
-                        Text="Zoom: 100%"/>
+                        Text="Zoom Level: 1.0"/>
                     <TextBlock
                         x:Name="LineAndCol"
                         Padding="100,5,75,0"

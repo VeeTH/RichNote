@@ -24,22 +24,104 @@
             IsOpen="False"
             RequestedTheme="Light">
             <CommandBar.PrimaryCommands>
-                <AppBarButton Icon="ZoomOut" ToolTipService.ToolTip="Zoom Out (Ctrl-Minus)"/>
-                <AppBarButton Icon="ZoomIn" ToolTipService.ToolTip="Zoom In (Ctrl+Plus)"/>
+                <AppBarButton
+                    Click="ZoomOut_Click"
+                    Icon="ZoomOut"
+                    ToolTipService.ToolTip="Zoom Out (Ctrl-Minus)">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="Subtract" Modifiers="Control"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+                <AppBarButton
+                    Click="ZoomIn_Click"
+                    Icon="ZoomIn"
+                    ToolTipService.ToolTip="Zoom In (Ctrl+Plus)">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="Add" Modifiers="Control"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
                 <AppBarSeparator/>
-                <AppBarButton Icon="List" ToolTipService.ToolTip="Numbered List (Alt+L)"/>
-                <AppBarButton Icon="Bullets" ToolTipService.ToolTip="Bullet Points (Ctrl+L)"/>
+                <AppBarButton
+                    Click="NumberList_Click"
+                    Icon="List"
+                    ToolTipService.ToolTip="Numbered List (Ctrl+E)">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="E" Modifiers="Control"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+                <AppBarButton
+                    Click="BulletList_Click"
+                    Icon="Bullets"
+                    ToolTipService.ToolTip="Bulleted List (Ctrl+Q)">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="Q" Modifiers="Control"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
                 <AppBarSeparator/>
-                <AppBarButton Icon="FontDecrease" ToolTipService.ToolTip="Decrease Font Size (Ctrl+Shift+&lt;)"/>
-                <AppBarButton Icon="FontIncrease" ToolTipService.ToolTip="Increase Font Size (Ctrl+Shift+&gt;)"/>
+                <AppBarButton
+                    Click="FontSizeDown_Click"
+                    Icon="FontDecrease"
+                    ToolTipService.ToolTip="Decrease Font Size (Ctrl+Shift+&lt;)">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="Subtract" Modifiers="Control,Shift"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+                <AppBarButton
+                    Click="FontSizeUp_Click"
+                    Icon="FontIncrease"
+                    ToolTipService.ToolTip="Increase Font Size (Ctrl+Shift+&gt;)">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="Add" Modifiers="Control"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
                 <AppBarButton Icon="Font" ToolTipService.ToolTip="Font"/>
                 <AppBarSeparator/>
-                <AppBarButton Icon="Underline" ToolTipService.ToolTip="Underline (Ctrl+U)"/>
-                <AppBarButton Icon="Italic" ToolTipService.ToolTip="Italics (Ctrl+I)"/>
-                <AppBarButton Icon="Bold" ToolTipService.ToolTip="Bold (Ctrl+B)"/>
+                <AppBarButton Click="Strikethrough_Click" ToolTipService.ToolTip="Strikethrough">
+                    <AppBarButton.Icon>
+                        <FontIcon Glyph="&#xEDE0;"/>
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton
+                    Click="Underline_Click"
+                    Icon="Underline"
+                    ToolTipService.ToolTip="Underline (Ctrl+U)">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="U" Modifiers="Control"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+                <AppBarButton
+                    Click="Italics_Click"
+                    Icon="Italic"
+                    ToolTipService.ToolTip="Italics (Ctrl+I)">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="I" Modifiers="Control"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+                <AppBarButton
+                    Click="Bold_Click"
+                    Icon="Bold"
+                    ToolTipService.ToolTip="Bold (Ctrl+B)">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="B" Modifiers="Control"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
                 <AppBarSeparator/>
-                <AppBarButton Icon="Redo" ToolTipService.ToolTip="Redo (Ctrl+Y)"/>
-                <AppBarButton Icon="Undo" ToolTipService.ToolTip="Undo (Ctrl+Z)"/>
+                <AppBarButton
+                    Click="Redo_Click"
+                    Icon="Redo"
+                    ToolTipService.ToolTip="Redo (Ctrl+Y)">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="Y" Modifiers="Control"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+                <AppBarButton
+                    Click="Undo_Click"
+                    Icon="Undo"
+                    ToolTipService.ToolTip="Undo (Ctrl+Z)">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="Z" Modifiers="Control"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
                 <AppBarSeparator/>
                 <AppBarElementContainer>
                     <TextBlock
@@ -60,7 +142,7 @@
             ContextFlyout="{StaticResource EditorFlyout}"
             CornerRadius="0"
             DisabledFormattingAccelerators="All"
-            SelectionFlyout="{StaticResource EditorFlyout}">
+            SelectionFlyout="{x:Null}">
             <RichEditBox.Resources>
                 <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="White"/>
                 <SolidColorBrush x:Key="TextControlBackground" Color="White"/>
