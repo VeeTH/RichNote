@@ -24,8 +24,9 @@ namespace RichNote
     public sealed partial class MainWindow : Window
     {
         // Initialization
+        public static MainWindow Instance { get; private set; }
+        public IEditorControl currentEditor;
         private ObservableCollection<TabViewItem> tabItems = new ObservableCollection<TabViewItem>();
-        private IEditorControl currentEditor;
 
         public MainWindow()
         {
@@ -33,6 +34,7 @@ namespace RichNote
             InitializeWindow();
             ExtendsContentIntoTitleBar = true;          
             SetTitleBar(AppTitleBar);
+            Instance = this;
 
             StandardNewDoc(1, "New Document");
             DocTabView.TabItemsSource = tabItems;
@@ -174,6 +176,10 @@ namespace RichNote
 
                 switch (clickedText)
                 {
+                    case "Select All":
+                        App.SelectAll_Click(null, null);
+                        break;
+                    
                     default:
                         break;
                 }
