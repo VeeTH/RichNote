@@ -27,6 +27,7 @@ namespace RichNote
         public static MainWindow Instance { get; private set; }
         public IEditorControl currentEditor;
         private ObservableCollection<TabViewItem> tabItems = new ObservableCollection<TabViewItem>();
+        private List<String> openFilePaths = new List<String>();
 
         public MainWindow()
         {
@@ -156,6 +157,14 @@ namespace RichNote
                 {
                     case "Open...":
                         OpenFile();
+                        break;
+
+                    case "Save":
+                        SaveFile();
+                        break;
+
+                    case "Save As...":
+                        SaveFile();
                         break;
                     
                     case "Quit":
@@ -294,6 +303,51 @@ namespace RichNote
                         break;
                 }
             } else
+            {
+                return;
+            }
+        }
+
+        private async void SaveFile()
+        {            
+            var saver = new Windows.Storage.Pickers.FileSavePicker();
+            WinRT.Interop.InitializeWithWindow.Initialize(saver, WinRT.Interop.WindowNative.GetWindowHandle(this));            
+            saver.FileTypeChoices.Clear();
+            if (currentEditor.EditorTextBox != null)
+            {
+                saver.FileTypeChoices.Add("Plain Text", new List<string>() { ".txt" });
+            } else if (currentEditor.EditorRichEditBox != null)
+            {                
+                saver.FileTypeChoices.Add("Rich Text", new List<string>() { ".rtf" });
+            }
+
+            StorageFile file = await saver.PickSaveFileAsync();
+
+            if (file != null)
+            {
+                switch (file.FileType)
+                {
+                    case ".txt":
+                        var txtSaveContent = currentEditor.EditorTextBox.Text;
+                        await FileIO.WriteTextAsync(file, txtSaveContent);
+                        break;
+
+                    case ".rtf":
+                        var stream = await file.OpenAsync(FileAccessMode.ReadWrite);
+                        currentEditor.EditorRichEditBox.Document.SaveToStream(Microsoft.UI.Text.TextGetOptions.FormatRtf, stream);
+                        break;
+
+                    default:
+                        break;
+
+                }
+
+                if (!openFilePaths.Contains(file.Path))
+                {
+                    openFilePaths.Add(file.Path);
+                }
+            }
+            else
             {
                 return;
             }
