@@ -7,6 +7,8 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,6 +20,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.UI.Popups;
+using static RichNote.TabStateModel;
 
 namespace RichNote
 {
@@ -29,6 +32,8 @@ namespace RichNote
         private ObservableCollection<TabViewItem> tabItems = new ObservableCollection<TabViewItem>();
         private List<String> openFilePaths = new List<String>();
 
+        public bool loadedPreviousTabs = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -39,14 +44,45 @@ namespace RichNote
 
             StandardNewDoc(1, "New Document");
             DocTabView.TabItemsSource = tabItems;
-            Closed += MainWindow_Closed;         
+            Closed += MainWindow_Closed;
         }
 
         // Event handlers
         private void MainWindow_Closed(object sender, WindowEventArgs args)
         {
-            // Autosave code will go here     
-            return;
+            var tabDataList = new List<TabData>();
+
+            foreach (TabViewItem item in tabItems)
+            {
+                if (item.Content is IEditorControl editorControl)
+                {
+                    string type = null;
+                    string content = null;
+
+                    if (editorControl.EditorTextBox != null)
+                    {
+                        type = "Standard";
+                        content = editorControl.EditorTextBox.Text;
+                    }
+                    else if (editorControl.EditorRichEditBox != null)
+                    {
+                        type = "Rich";
+                        editorControl.EditorRichEditBox.Document.GetText(Microsoft.UI.Text.TextGetOptions.FormatRtf, out content);
+                    }
+
+                    tabDataList.Add(new TabData
+                    {
+                        Header = item.Header.ToString(),
+                        Type = type,
+                        Content = content
+                    });
+                }
+            }
+
+            var tabState = new TabState { Tabs = tabDataList };
+            var bsonDocument = tabState.ToBsonDocument();
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "myObject.txt");
+            File.WriteAllBytes(filePath, bsonDocument.ToBson());            
         }
 
         private void TabView_NewDoc(TabView sender, object args)
@@ -109,6 +145,36 @@ namespace RichNote
             {
                 return;
             }
+            
+            if (loadedPreviousTabs == false)
+            {
+                loadedPreviousTabs = true;
+                var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "myObject.txt");
+                byte[] bsonData = File.ReadAllBytes(filePath);
+                var tabState = BsonSerializer.Deserialize<TabState>(bsonData);
+                foreach (TabData tabData in tabState.Tabs)
+                {
+                    string header = tabData.Header;
+                    string type = tabData.Type;
+                    string content = tabData.Content;
+
+                    switch (type)
+                    {
+                        case "Standard":
+                            StandardNewDoc(1, header);
+                            currentEditor.EditorTextBox.Text = content;
+                            break;
+
+                        case "Rich":
+                            StandardNewDoc(2, header);
+                            currentEditor.EditorRichEditBox.Document.SetText(Microsoft.UI.Text.TextSetOptions.FormatRtf, content);
+                            break;
+
+                        default:
+                            break;
+                    }
+                }                
+            }
         }
 
         private void SelectDocFormat_ActionButtonClick(TeachingTip sender, object args)
@@ -119,7 +185,7 @@ namespace RichNote
 
         private void SelectDocFormat_CloseButtonClick(TeachingTip sender, object args)
         {
-            StandardNewDoc(2, "New Document");
+            StandardNewDoc(2, "New Document");            
         }
 
         private void MenuBarItem_AboutClick(object sender, RoutedEventArgs e)
