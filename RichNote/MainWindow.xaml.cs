@@ -31,6 +31,7 @@ namespace RichNote
         public IEditorControl currentEditor;
         private ObservableCollection<TabViewItem> tabItems = new ObservableCollection<TabViewItem>();
         private List<String> openFilePaths = new List<String>();
+        public string LocalAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RichNote");
 
         public bool loadedPreviousTabs = false;
 
@@ -45,6 +46,11 @@ namespace RichNote
             StandardNewDoc(1, "New Document");
             DocTabView.TabItemsSource = tabItems;
             Closed += MainWindow_Closed;
+            
+            if (!Directory.Exists(LocalAppData))
+            {
+                Directory.CreateDirectory(LocalAppData);
+            }
         }
 
         // Event handlers
