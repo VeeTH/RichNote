@@ -87,7 +87,7 @@ namespace RichNote
 
             var tabState = new TabState { Tabs = tabDataList };
             var bsonDocument = tabState.ToBsonDocument();
-            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "myObject.txt");
+            string filePath = Path.Combine(LocalAppData, "tab_state.dat");
             File.WriteAllBytes(filePath, bsonDocument.ToBson());            
         }
 
@@ -155,7 +155,7 @@ namespace RichNote
             if (loadedPreviousTabs == false)
             {
                 loadedPreviousTabs = true;
-                var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "myObject.txt");
+                var filePath = Path.Combine(LocalAppData, "tab_state.dat");
                 byte[] bsonData = File.ReadAllBytes(filePath);
                 var tabState = BsonSerializer.Deserialize<TabState>(bsonData);
                 foreach (TabData tabData in tabState.Tabs)
