@@ -109,9 +109,17 @@ namespace RichNote
 
             if (result == ContentDialogResult.Primary)
             {
+                var saveResult = await SaveFile();
+                if (saveResult == ContentDialogResult.Primary)
+                {
                 ActivityNotif.Title = $"{args.Tab.Header} saved successfully!";   
                 ActivityNotif.IsOpen = true;
                 tabItems.Remove(args.Tab);
+                } else if (saveResult == ContentDialogResult.None)
+                {
+                    ActivityNotif.Title = $"Error saving {args.Tab.Header}!";
+                    ActivityNotif.IsOpen = true;
+                }
             } else if (result == ContentDialogResult.Secondary) 
             {
                 tabItems.Remove(args.Tab);
@@ -380,7 +388,7 @@ namespace RichNote
             }
         }
 
-        private async void SaveFile()
+        private async Task<ContentDialogResult> SaveFile()
         {            
             var saver = new Windows.Storage.Pickers.FileSavePicker();
             WinRT.Interop.InitializeWithWindow.Initialize(saver, WinRT.Interop.WindowNative.GetWindowHandle(this));            
@@ -418,10 +426,12 @@ namespace RichNote
                 {
                     openFilePaths.Add(file.Path);
                 }
+
+                return ContentDialogResult.Primary;
             }
             else
             {
-                return;
+                return ContentDialogResult.None;
             }
         }
 
