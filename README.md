@@ -35,7 +35,7 @@ Want to contribute? Pull requests and issues are always open. Fork according to 
 * [Windows App SDK 1.7.2](https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/downloads)
 
 ### Packages used
-* IniParser_Net8
+* ini-parser-netstandard
 * MongoDB.Bson
 * UDE.CSharp (planned)
 * Microsoft.Graphics.Win2D (planned)
