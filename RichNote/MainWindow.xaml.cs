@@ -103,6 +103,12 @@ namespace RichNote
                 return;
             }
 
+            if (InputKeyboardSource.GetKeyStateForCurrentThread(VirtualKey.Shift).HasFlag(CoreVirtualKeyStates.Down) == true)
+            {
+                tabItems.Remove(args.Tab);
+                return;
+            }
+
             ContentDialog dialog = BuildSaveDialog(RootGrid);
 
             var result = await dialog.ShowAsync();
