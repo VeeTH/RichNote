@@ -275,6 +275,24 @@ namespace RichNote
                         App.SelectAll_Click(null, null);
                         break;
                     
+                    case "Insert Date and Time":
+                        if (currentEditor.EditorTextBox != null)
+                        {
+                            currentEditor.EditorTextBox.Focus(FocusState.Programmatic);
+                            currentEditor.EditorTextBox.Text = new string(currentEditor.EditorTextBox.Text.Insert(currentEditor.EditorTextBox.SelectionStart, $"{DateTime.Now}"));
+                            currentEditor.EditorTextBox.SelectionStart = currentEditor.EditorTextBox.Text.Length;
+                        }
+                        else if (currentEditor.EditorRichEditBox != null)
+                        {
+                            var startPos = currentEditor.EditorRichEditBox.Document.Selection.StartPosition;
+                            var date = $"{DateTime.Now}";
+                            currentEditor.EditorRichEditBox.Focus(FocusState.Programmatic);
+                            currentEditor.EditorRichEditBox.Document.Selection.SetRange(startPos, startPos);
+                            currentEditor.EditorRichEditBox.Document.Selection.SetText(Microsoft.UI.Text.TextSetOptions.None, date);
+                            currentEditor.EditorRichEditBox.Document.Selection.StartPosition = startPos + date.Length;
+                        }
+                        break;
+
                     default:
                         break;
                 }
