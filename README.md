@@ -11,11 +11,14 @@ I decided to create RichNote due to my experiences with the Windows 11 Notepad. 
 * Separate TXT/RTF editors
 * Text formatting
 * File handling (opening and saving)
+* Autosaving (tabs only)
 
 ### To-do features
-* Autosaving
-* Status bar
 * Settings
+* Status bar
+* File path tracking
+* External file handling (file association, command line argument)
+* Splash screen
 
 ## Building
 1. Verify you have all the requirements installed.
