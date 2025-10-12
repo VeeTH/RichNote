@@ -240,6 +240,13 @@
             </ContentDialog.TitleTemplate>
         </ContentDialog>
 
+        <!--  Settings dialog  -->
+        <ContentDialog x:Name="settingsDialog">
+            <ContentDialog.Content>
+                <local:SettingsPage OkClicked="SettingsPage_OkClicked"/>
+            </ContentDialog.Content>
+        </ContentDialog>
+
         <!--  General activity notification  -->
         <TeachingTip
             x:Name="ActivityNotif"

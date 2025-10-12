@@ -1,4 +1,5 @@
 using Microsoft.UI;
+using Microsoft.UI.Input;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -19,6 +20,9 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.System;
+using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Popups;
 using static RichNote.TabStateModel;
 
@@ -43,14 +47,16 @@ namespace RichNote
             SetTitleBar(AppTitleBar);
             Instance = this;
 
-            StandardNewDoc(1, "New Document");
-            DocTabView.TabItemsSource = tabItems;
-            Closed += MainWindow_Closed;
-            
             if (!Directory.Exists(LocalAppData))
             {
                 Directory.CreateDirectory(LocalAppData);
             }
+            SettingsPage.CreateDefaultSettings(true);
+
+            StandardNewDoc(1, "New Document");
+            DocTabView.TabItemsSource = tabItems;
+
+            Closed += MainWindow_Closed;            
         }
 
         // Event handlers
@@ -253,6 +259,10 @@ namespace RichNote
                         SaveFile();
                         break;
                     
+                    case "Settings":
+                        settingsDialog.ShowAsync();
+                        break;
+
                     case "Quit":
                         Environment.Exit(0);
                         break;
@@ -321,6 +331,11 @@ namespace RichNote
                         break;
                 }
             }
+        }
+
+        private void SettingsPage_OkClicked(object sender, EventArgs e)
+        {
+            settingsDialog.Hide();
         }
 
         // Helper methods

@@ -9,6 +9,125 @@
     mc:Ignorable="d">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <TextBlock
+            Grid.Row="0"
+            Margin="0,0,0,10"
+            Style="{StaticResource SubtitleTextBlockStyle}"
+            Text="Settings">
+        </TextBlock>
+
+        <TabView
+            Grid.Row="1"
+            Margin="0,0,0,10"
+            VerticalAlignment="Stretch"
+            CanReorderTabs="False"
+            IsAddTabButtonVisible="False"
+            RequestedTheme="Dark"
+            TabWidthMode="SizeToContent">
+            <TabView.Resources>
+                <SolidColorBrush x:Key="TabViewItemHeaderBackgroundSelected" Color="DimGray"/>
+            </TabView.Resources>
+            <TabViewItem Header="Document" IsClosable="False">
+                <TabViewItem.Content>
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock VerticalAlignment="Center" Text="Autosave documents on close"/>
+                            <ToggleSwitch
+                                x:Name="AutosaveOnClose"
+                                FlowDirection="RightToLeft"
+                                IsOn="true"
+                                Tag="1 1"
+                                Toggled="SettingHandler"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock VerticalAlignment="Center" Text="Open blank document on autoload"/>
+                            <ToggleSwitch
+                                x:Name="OpenBlankDocOnAutoload"
+                                Margin="-32,0,0,0"
+                                FlowDirection="RightToLeft"
+                                IsOn="false"
+                                Tag="1 2"
+                                Toggled="SettingHandler"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock VerticalAlignment="Center" Text="Default editor format"/>
+                            <ToggleSwitch
+                                x:Name="IsDefaultTXT"
+                                Margin="54,0,0,0"
+                                FlowDirection="RightToLeft"
+                                IsOn="true"
+                                OffContent="RTF"
+                                OnContent="TXT"
+                                Tag="1 3"
+                                Toggled="SettingHandler">
+                            </ToggleSwitch>
+                        </StackPanel>
+                    </StackPanel>
+                </TabViewItem.Content>
+            </TabViewItem>
+            <TabViewItem Header="Interface" IsClosable="False">
+                <TabViewItem.Content>
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" Text="Show status bar"/>
+                                <ToggleSwitch
+                                    x:Name="ShowStatusBar"
+                                    Margin="82,0,0,0"
+                                    FlowDirection="RightToLeft"
+                                    IsOn="false"
+                                    Tag="2 1"
+                                    Toggled="SettingHandler"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock VerticalAlignment="Center" Text="Show splash screen"/>
+                            <ToggleSwitch
+                                x:Name="ShowSplashScreen"
+                                Margin="60,0,0,0"
+                                FlowDirection="RightToLeft"
+                                IsOn="false"
+                                Tag="2 2"
+                                Toggled="SettingHandler"/>
+                        </StackPanel>
+                    </StackPanel>
+                </TabViewItem.Content>
+            </TabViewItem>
+        </TabView>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="125"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="56"/>
+            </Grid.ColumnDefinitions>
+
+            <Button
+                Grid.Column="0"
+                HorizontalAlignment="Left"
+                Click="ButtonHandler"
+                Content="Reset defaults">
+            </Button>
+
+            <Button
+                Grid.Column="1"
+                HorizontalAlignment="Center"
+                Click="ButtonHandler"
+                Content="Open user folder">
+            </Button>
+
+            <Button
+                Grid.Column="2"
+                HorizontalAlignment="Right"
+                Click="ButtonHandler"
+                Content="OK">
+            </Button>
+        </Grid>
     </Grid>
 </UserControl>
