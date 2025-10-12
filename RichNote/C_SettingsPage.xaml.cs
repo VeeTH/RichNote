@@ -47,10 +47,14 @@ namespace RichNote
                         break;
 
                     case "1 2":
-                        WriteSetting("Saving", "OpenBlankDocOnAutoload", toggledSwitch.IsOn.ToString().ToLower());
+                        WriteSetting("Saving", "AutoloadOnOpen", toggledSwitch.IsOn.ToString().ToLower());
                         break;
 
                     case "1 3":
+                        WriteSetting("Saving", "OpenBlankDocOnAutoload", toggledSwitch.IsOn.ToString().ToLower());
+                        break;
+
+                    case "1 4":
                         WriteSetting("Saving", "DefaultEditor", toggledSwitch.IsOn == true ? "txt" : "rtf");
                         break;
 
@@ -102,7 +106,8 @@ namespace RichNote
             var p = new FileIniDataParser();
             var defaults = new IniData();
             defaults.Sections.AddSection("Saving");
-            defaults["Saving"].AddKey("AutosaveOnClose", "true"); 
+            defaults["Saving"].AddKey("AutosaveOnClose", "true");
+            defaults["Saving"].AddKey("AutoloadOnOpen", "true");
             defaults["Saving"].AddKey("OpenBlankDocOnAutoload", "false");
             defaults["Saving"].AddKey("DefaultEditor", "txt");
             defaults.Sections.AddSection("Interface");
@@ -137,6 +142,7 @@ namespace RichNote
             if (Instance.parsedSettings != null)
             {
                 Instance.AutosaveOnClose.IsOn = Instance.parsedSettings["Saving"]["AutosaveOnClose"] == "true" ? true : false;
+                Instance.AutoloadOnOpen.IsOn = Instance.parsedSettings["Saving"]["AutoloadOnOpen"] == "true" ? true : false;
                 Instance.OpenBlankDocOnAutoload.IsOn = Instance.parsedSettings["Saving"]["OpenBlankDocOnAutoload"] == "true" ? true : false;
                 Instance.IsDefaultTXT.IsOn = Instance.parsedSettings["Saving"]["DefaultEditor"] == "txt" ? true : false;
                 Instance.ShowStatusBar.IsOn = Instance.parsedSettings["Interface"]["ShowStatusBar"] == "true" ? true : false;
