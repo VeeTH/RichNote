@@ -23,7 +23,8 @@ namespace RichNote
         // Initialization
         public static SettingsPage Instance { get; private set; }
         public event EventHandler? OkClicked;
-        private IniParserConfiguration parserSettings = new IniParserConfiguration { CaseInsensitive = true };
+        public event EventHandler? StatusBarToggled;
+        public bool EnableStatusBar => ShowStatusBar.IsOn;
         public IniData parsedSettings = null;
         private IniData defaultSettings = null;    
 
@@ -43,23 +44,24 @@ namespace RichNote
                 switch (switchTag)
                 {
                     case "1 1":
-                        WriteSetting("Saving", "AutosaveOnClose", toggledSwitch.IsOn.ToString().ToLower());
+                        WriteSetting("Document", "AutosaveOnClose", toggledSwitch.IsOn.ToString().ToLower());
                         break;
 
                     case "1 2":
-                        WriteSetting("Saving", "AutoloadOnOpen", toggledSwitch.IsOn.ToString().ToLower());
+                        WriteSetting("Document", "AutoloadOnOpen", toggledSwitch.IsOn.ToString().ToLower());
                         break;
 
                     case "1 3":
-                        WriteSetting("Saving", "OpenBlankDocOnAutoload", toggledSwitch.IsOn.ToString().ToLower());
+                        WriteSetting("Document", "OpenBlankDocOnAutoload", toggledSwitch.IsOn.ToString().ToLower());
                         break;
 
                     case "1 4":
-                        WriteSetting("Saving", "DefaultEditor", toggledSwitch.IsOn == true ? "txt" : "rtf");
+                        WriteSetting("Document", "DefaultEditor", toggledSwitch.IsOn == true ? "txt" : "rtf");
                         break;
 
                     case "2 1":
                         WriteSetting("Interface", "ShowStatusBar", toggledSwitch.IsOn.ToString().ToLower());
+                        StatusBarToggled?.Invoke(this, EventArgs.Empty);
                         break;
 
                     case "2 2":
@@ -105,11 +107,11 @@ namespace RichNote
             var LocalSettingsData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RichNote", "config.ini");
             var p = new FileIniDataParser();
             var defaults = new IniData();
-            defaults.Sections.AddSection("Saving");
-            defaults["Saving"].AddKey("AutosaveOnClose", "true");
-            defaults["Saving"].AddKey("AutoloadOnOpen", "true");
-            defaults["Saving"].AddKey("OpenBlankDocOnAutoload", "false");
-            defaults["Saving"].AddKey("DefaultEditor", "txt");
+            defaults.Sections.AddSection("Document");
+            defaults["Document"].AddKey("AutosaveOnClose", "true");
+            defaults["Document"].AddKey("AutoloadOnOpen", "true");
+            defaults["Document"].AddKey("OpenBlankDocOnAutoload", "false");
+            defaults["Document"].AddKey("DefaultEditor", "txt");
             defaults.Sections.AddSection("Interface");
             defaults["Interface"].AddKey("ShowStatusBar", "true");
             defaults["Interface"].AddKey("ShowSplashScreen", "false");
@@ -134,6 +136,11 @@ namespace RichNote
             parsed = p.ReadFile(LocalSettingsData);
 
             Instance.parsedSettings = parsed;
+
+            if (parsed["Document"]["DefaultEditor"] != "txt" && parsed["Document"]["DefaultEditor"] != "rtf") {
+                WriteSetting("Document", "DefaultEditor", "txt");
+            }
+
             ToggleSettingVars();
         }
 
@@ -141,10 +148,10 @@ namespace RichNote
         {
             if (Instance.parsedSettings != null)
             {
-                Instance.AutosaveOnClose.IsOn = Instance.parsedSettings["Saving"]["AutosaveOnClose"] == "true" ? true : false;
-                Instance.AutoloadOnOpen.IsOn = Instance.parsedSettings["Saving"]["AutoloadOnOpen"] == "true" ? true : false;
-                Instance.OpenBlankDocOnAutoload.IsOn = Instance.parsedSettings["Saving"]["OpenBlankDocOnAutoload"] == "true" ? true : false;
-                Instance.IsDefaultTXT.IsOn = Instance.parsedSettings["Saving"]["DefaultEditor"] == "txt" ? true : false;
+                Instance.AutosaveOnClose.IsOn = Instance.parsedSettings["Document"]["AutosaveOnClose"] == "true" ? true : false;
+                Instance.AutoloadOnOpen.IsOn = Instance.parsedSettings["Document"]["AutoloadOnOpen"] == "true" ? true : false;
+                Instance.OpenBlankDocOnAutoload.IsOn = Instance.parsedSettings["Document"]["OpenBlankDocOnAutoload"] == "true" ? true : false;
+                Instance.IsDefaultTXT.IsOn = Instance.parsedSettings["Document"]["DefaultEditor"] == "txt" ? true : false;
                 Instance.ShowStatusBar.IsOn = Instance.parsedSettings["Interface"]["ShowStatusBar"] == "true" ? true : false;
                 Instance.ShowSplashScreen.IsOn = Instance.parsedSettings["Interface"]["ShowSplashScreen"] == "true" ? true : false;
             }

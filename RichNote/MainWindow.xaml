@@ -140,6 +140,7 @@
 
         <!--  Status bar  -->
         <CommandBar
+            x:Name="MainStatusBar"
             Grid.Row="2"
             Height="25"
             VerticalAlignment="Bottom"
@@ -243,7 +244,7 @@
         <!--  Settings dialog  -->
         <ContentDialog x:Name="settingsDialog">
             <ContentDialog.Content>
-                <local:SettingsPage OkClicked="SettingsPage_OkClicked"/>
+                <local:SettingsPage OkClicked="SettingsPage_OkClicked" StatusBarToggled="SettingsPage_StatusBarToggled"/>
             </ContentDialog.Content>
         </ContentDialog>
 

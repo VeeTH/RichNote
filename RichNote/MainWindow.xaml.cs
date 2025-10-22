@@ -1,3 +1,4 @@
+using IniParser.Model;
 using Microsoft.UI;
 using Microsoft.UI.Input;
 using Microsoft.UI.Windowing;
@@ -37,7 +38,18 @@ namespace RichNote
         private List<String> openFilePaths = new List<String>();
         public string LocalAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RichNote");
 
-        public bool loadedPreviousTabs = false;
+        private IniData _settings;
+        private IniData Settings
+        {
+            get
+            {
+                _settings = _settings == null ? SettingsPage.Instance.parsedSettings : _settings;
+                return _settings;
+            }
+        }
+
+        bool loadedPreviousTabs = false;
+        bool removedBlankDoc = false;
 
         public MainWindow()
         {
@@ -53,7 +65,7 @@ namespace RichNote
             }
             SettingsPage.CreateDefaultSettings(true);
 
-            StandardNewDoc(1, "New Document");
+            StandardNewDoc(Settings["Document"]["DefaultEditor"] == "txt" ? 1 : 2, "New Document");
             DocTabView.TabItemsSource = tabItems;
 
             Closed += MainWindow_Closed;            
@@ -94,11 +106,21 @@ namespace RichNote
             var tabState = new TabState { Tabs = tabDataList };
             var bsonDocument = tabState.ToBsonDocument();
             string filePath = Path.Combine(LocalAppData, "tab_state.dat");
+            
+            if (Settings["Document"]["AutosaveOnClose"] == "true")
+            {
             File.WriteAllBytes(filePath, bsonDocument.ToBson());            
+        }
         }
 
         private void TabView_NewDoc(TabView sender, object args)
         {
+            if (InputKeyboardSource.GetKeyStateForCurrentThread(VirtualKey.Shift).HasFlag(CoreVirtualKeyStates.Down) == true)
+            {
+                StandardNewDoc(Settings["Document"]["DefaultEditor"] == "txt" ? 1 : 2, "New Document");
+                return;
+            }
+
             SelectDocFormat.IsOpen = true;
         }
 
@@ -140,6 +162,7 @@ namespace RichNote
                 return;
             }
         }
+        
         private void TabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (DocTabView.SelectedItem is TabViewItem selectedTabItem)
@@ -172,7 +195,13 @@ namespace RichNote
                 return;
             }
             
-            if (loadedPreviousTabs == false)
+            if (removedBlankDoc == false && Settings["Document"]["OpenBlankDocOnAutoload"] == "false" && Settings["Document"]["AutoloadOnOpen"] == "true")
+            {
+                tabItems.RemoveAt(0);
+            }
+            removedBlankDoc = true;
+
+            if (loadedPreviousTabs == false && Settings["Document"]["AutoloadOnOpen"] == "true")
             {
                 loadedPreviousTabs = true;
                 var filePath = Path.Combine(LocalAppData, "tab_state.dat");
@@ -200,6 +229,7 @@ namespace RichNote
                             break;
                     }
                 }                
+                DocTabView.UpdateLayout();
             }
         }
 
@@ -336,6 +366,20 @@ namespace RichNote
         private void SettingsPage_OkClicked(object sender, EventArgs e)
         {
             settingsDialog.Hide();
+        }
+
+        private void SettingsPage_StatusBarToggled(object sender, EventArgs e)
+        {
+            if (sender is SettingsPage settings)
+            {
+                if (settings.EnableStatusBar == true)
+                {
+                    MainStatusBar.Visibility = Visibility.Visible;
+                } else
+                {
+                    MainStatusBar.Visibility = Visibility.Collapsed;
+                }
+            }
         }
 
         // Helper methods
