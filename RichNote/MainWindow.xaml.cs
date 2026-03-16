@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
@@ -37,7 +38,7 @@ namespace RichNote
         private ObservableCollection<TabViewItem> tabItems = new ObservableCollection<TabViewItem>();
         private List<String> openFilePaths = new List<String>();
         public string LocalAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RichNote");
-
+        
         private IniData _settings;
         private IniData Settings
         {
@@ -50,6 +51,7 @@ namespace RichNote
 
         bool loadedPreviousTabs = false;
         bool removedBlankDoc = false;
+        bool dummyTabAdded = false;
 
         public MainWindow()
         {
@@ -109,8 +111,8 @@ namespace RichNote
             
             if (Settings["Document"]["AutosaveOnClose"] == "true")
             {
-            File.WriteAllBytes(filePath, bsonDocument.ToBson());            
-        }
+                File.WriteAllBytes(filePath, bsonDocument.ToBson());            
+            }
         }
 
         private void TabView_NewDoc(TabView sender, object args)
@@ -146,9 +148,9 @@ namespace RichNote
                 var saveResult = await SaveFile();
                 if (saveResult == ContentDialogResult.Primary)
                 {
-                ActivityNotif.Title = $"{args.Tab.Header} saved successfully!";   
-                ActivityNotif.IsOpen = true;
-                tabItems.Remove(args.Tab);
+                    ActivityNotif.Title = $"{args.Tab.Header} saved successfully!";   
+                    ActivityNotif.IsOpen = true;
+                    tabItems.Remove(args.Tab);
                 } else if (saveResult == ContentDialogResult.None)
                 {
                     ActivityNotif.Title = $"Error saving {args.Tab.Header}!";
@@ -194,9 +196,9 @@ namespace RichNote
             {
                 return;
             }
-            
+
             if (removedBlankDoc == false && Settings["Document"]["OpenBlankDocOnAutoload"] == "false" && Settings["Document"]["AutoloadOnOpen"] == "true")
-            {
+            {               
                 tabItems.RemoveAt(0);
             }
             removedBlankDoc = true;
@@ -228,9 +230,9 @@ namespace RichNote
                         default:
                             break;
                     }
-                }                
+                }
                 DocTabView.UpdateLayout();
-            }
+            }            
         }
 
         private void SelectDocFormat_ActionButtonClick(TeachingTip sender, object args)
@@ -288,7 +290,7 @@ namespace RichNote
                     case "Save As...":
                         SaveFile();
                         break;
-                    
+
                     case "Settings":
                         settingsDialog.ShowAsync();
                         break;
@@ -314,7 +316,7 @@ namespace RichNote
                     case "Select All":
                         App.SelectAll_Click(null, null);
                         break;
-                    
+
                     case "Insert Date and Time":
                         if (currentEditor.EditorTextBox != null)
                         {
@@ -382,6 +384,54 @@ namespace RichNote
             }
         }
 
+        private void File_OnDraggedIn(object sender, DragEventArgs e)
+        {
+            DocTabView.CanReorderTabs = false;
+            //DocTabView.IsAddTabButtonVisible = false; (too glitchy)
+            e.AcceptedOperation = DataPackageOperation.Copy;
+            DocTabView.Background = new SolidColorBrush(Color.FromArgb(255, 55, 115, 158));
+            if (dummyTabAdded == false)
+            {
+                dummyTabAdded = true;
+                tabItems.Add(new TabViewItem{Header = " ", Background = new SolidColorBrush(Colors.LightSteelBlue), Tag = "dummy"});
+            }
+        }
+
+        private void File_OnDraggedOut(object sender, DragEventArgs e)
+        {
+            DocTabView.CanReorderTabs = true;
+            //DocTabView.IsAddTabButtonVisible = true; (too glitchy)
+            DocTabView.Background = new SolidColorBrush(Colors.SteelBlue);
+            tabItems.Remove(tabItems.First(item => item.Tag?.ToString() == "dummy"));
+            dummyTabAdded = false;
+        }
+
+        private async void File_DraggedIn(object sender, DragEventArgs e)
+        {
+            DocTabView.CanReorderTabs = true;
+            //DocTabView.IsAddTabButtonVisible = true; (too glitchy)
+            DocTabView.Background = new SolidColorBrush(Colors.SteelBlue);
+            tabItems.Remove(tabItems.First(item => item.Tag?.ToString() == "dummy"));
+            dummyTabAdded = false;
+
+            if (e.DataView.Contains(StandardDataFormats.StorageItems))
+            {
+                var items = await e.DataView.GetStorageItemsAsync();
+                if (items[0] is StorageFile file)
+                {
+                    OpenFile(true, file);
+                }
+            }
+        }
+
+        private void File_TabStripDragOver(object sender, DragEventArgs e)
+        {
+            if (!e.DataView.Contains("TabViewItem"))
+            {
+                e.AcceptedOperation = DataPackageOperation.None;
+            }
+        }
+
         // Helper methods
         private void StandardNewDoc(int format, string tabName)
         { 
@@ -436,16 +486,22 @@ namespace RichNote
             return dialog;
         }
 
-        private async void OpenFile()
+        private async void OpenFile(bool skipPicker = false, StorageFile file = null)
         {
+            if (skipPicker == true)
+            {
+                goto OpenFile;
+            }
+            
             var picker = new Windows.Storage.Pickers.FileOpenPicker();
             WinRT.Interop.InitializeWithWindow.Initialize(picker, WinRT.Interop.WindowNative.GetWindowHandle(this));
             picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.List;
             picker.FileTypeFilter.Add(".txt");
             picker.FileTypeFilter.Add(".rtf");
 
-            StorageFile file = await picker.PickSingleFileAsync();
+            file = await picker.PickSingleFileAsync();
 
+        OpenFile:
             if (file != null)
             {
                 switch (file.FileType)
@@ -463,9 +519,12 @@ namespace RichNote
                         break;
 
                     default:
+                        ActivityNotif.Title = "File must be a .txt or .rtf file.";
+                        ActivityNotif.IsOpen = true;
                         break;
                 }
-            } else
+            }
+            else
             {
                 return;
             }
@@ -500,7 +559,7 @@ namespace RichNote
                         currentEditor.EditorRichEditBox.Document.SaveToStream(Microsoft.UI.Text.TextGetOptions.FormatRtf, stream);
                         break;
 
-                    default:
+                    default:                        
                         break;
 
                 }
@@ -533,6 +592,6 @@ namespace RichNote
                 overlappedPresenter.PreferredMinimumWidth = 775;
                 overlappedPresenter.PreferredMinimumHeight = 750;
             }
-        }
+        }        
     }
 }

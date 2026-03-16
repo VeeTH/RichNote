@@ -119,12 +119,17 @@
             Grid.Row="1"
             VerticalAlignment="Stretch"
             AddTabButtonClick="TabView_NewDoc"
+            AllowDrop="True"
             Background="SteelBlue"
             CanReorderTabs="True"
+            DragLeave="File_OnDraggedOut"
+            DragOver="File_OnDraggedIn"
+            Drop="File_DraggedIn"
             IsAddTabButtonVisible="True"
             RequestedTheme="Light"
             SelectionChanged="TabView_SelectionChanged"
-            TabCloseRequested="TabView_CloseDoc">
+            TabCloseRequested="TabView_CloseDoc"
+            TabStripDragOver="File_TabStripDragOver">
             <TabView.Resources>
                 <SolidColorBrush x:Key="TabViewItemHeaderBackgroundSelected" Color="WhiteSmoke"/>
                 <SolidColorBrush x:Key="TabViewButtonBackground" Color="LightSteelBlue"/>
