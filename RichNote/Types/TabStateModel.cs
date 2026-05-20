@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RichNote
+namespace RichNote.Types
 {
     internal class TabStateModel
     {

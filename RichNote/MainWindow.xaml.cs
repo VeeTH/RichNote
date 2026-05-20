@@ -11,6 +11,9 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
+using RichNote.Types;
+using RichNote.UserControls;
+using static RichNote.Types.TabStateModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,7 +29,6 @@ using Windows.System;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Popups;
-using static RichNote.TabStateModel;
 
 namespace RichNote
 {

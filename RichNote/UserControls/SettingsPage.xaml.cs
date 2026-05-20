@@ -16,7 +16,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
-namespace RichNote
+namespace RichNote.UserControls
 {
     public sealed partial class SettingsPage : UserControl
     {

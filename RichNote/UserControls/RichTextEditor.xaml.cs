@@ -8,6 +8,7 @@ using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using RichNote.Types;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,7 +19,7 @@ using Windows.Foundation.Collections;
 using Windows.System;
 using Windows.UI.Core;
 
-namespace RichNote;
+namespace RichNote.UserControls;
 
 public sealed partial class RichTextEditor : UserControl, IEditorControl
 {

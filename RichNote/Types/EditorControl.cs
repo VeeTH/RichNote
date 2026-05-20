@@ -1,6 +1,6 @@
 ﻿using Microsoft.UI.Xaml.Controls;
 
-namespace RichNote
+namespace RichNote.Types
 {
     public interface IEditorControl
     {
