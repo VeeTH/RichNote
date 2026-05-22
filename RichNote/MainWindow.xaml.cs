@@ -29,6 +29,7 @@ using Windows.System;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Popups;
+using WinUIEx;
 
 namespace RichNote
 {
@@ -581,13 +582,11 @@ namespace RichNote
 
         private void InitializeWindow()
         {
-            IntPtr hWnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
-            WindowId windowId = Win32Interop.GetWindowIdFromWindow(hWnd);
-            AppWindow appWindow = AppWindow.GetFromWindowId(windowId);
+            AppWindow appWindow = this.AppWindow;
 
-            appWindow.SetIcon(@"Assets\temp_icon.ico");
+            this.CenterOnScreen();
+            this.SetIcon(@"Assets\temp_icon.ico");
             appWindow.SetTaskbarIcon(@"Assets\temp_icon.ico");
-            //appWindow.Resize(new Windows.Graphics.SizeInt32(appWindow.Size.Width - 200, appWindow.Size.Height));
 
             if (appWindow.Presenter is OverlappedPresenter overlappedPresenter)
             {
