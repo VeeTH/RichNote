@@ -19,7 +19,10 @@ I decided to create RichNote due to my experiences with the Windows 11 Notepad. 
 * Status bar
 * File path tracking
 * External file handling (file association, command line argument)
+* Support for more formats (non-txt plain text files, maybe doc/docx)
 * Splash screen
+* Clipboard history
+* Markdown editing?
 
 ## Building
 1. Verify you have all the requirements installed.
@@ -36,10 +39,12 @@ Want to contribute? Pull requests and issues are always open. Fork according to 
 
 ### Requirements
 * [.NET 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
-* [Windows App SDK 1.7.2](https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/downloads)
+* [Windows App SDK 1.7.2](https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/downloads-archive)
 
 ### Packages used
 * ini-parser-netstandard
 * MongoDB.Bson
+* WinUIEx
 * UDE.CSharp (planned)
 * Microsoft.Graphics.Win2D (planned)
+* SharpHook (planned)
