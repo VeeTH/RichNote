@@ -298,7 +298,7 @@ namespace RichNote
                         break;
 
                     case "Quit":
-                        Environment.Exit(0);
+                        this.Close();
                         break;
 
                     default:
