@@ -130,7 +130,9 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
 
     private void ZoomIn_Click(object sender, RoutedEventArgs e)
     {
-        zoomFactor += 0.5;
+        if (zoomFactor < 5)
+        {
+            zoomFactor += 0.25;
         MyEditorRichEditBox.RenderTransform = new ScaleTransform { ScaleX = zoomFactor, ScaleY = zoomFactor };
     }
 
@@ -138,7 +140,7 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
     {
         if (zoomFactor > 1)
         {
-            zoomFactor -= 0.5;
+            zoomFactor -= 0.25;
             MyEditorRichEditBox.RenderTransform = new ScaleTransform { ScaleX = zoomFactor, ScaleY = zoomFactor };
         }
     }

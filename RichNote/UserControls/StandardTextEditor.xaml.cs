@@ -36,7 +36,9 @@ public sealed partial class StandardTextEditor : UserControl, IEditorControl
     // Event handlers
     private void ZoomIn_Click(object sender, RoutedEventArgs e)
     {
-        zoomFactor += 0.5;
+        if (zoomFactor < 5)
+        {
+            zoomFactor += 0.25;
         editor.RenderTransform = new ScaleTransform { ScaleX = zoomFactor, ScaleY = zoomFactor };
     }
 
@@ -44,7 +46,7 @@ public sealed partial class StandardTextEditor : UserControl, IEditorControl
     {
         if (zoomFactor > 1)
         {
-            zoomFactor -= 0.5;
+            zoomFactor -= 0.25;
             editor.RenderTransform = new ScaleTransform { ScaleX = zoomFactor, ScaleY = zoomFactor };
         }
     }
