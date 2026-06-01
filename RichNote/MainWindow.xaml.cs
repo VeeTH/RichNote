@@ -43,7 +43,7 @@ namespace RichNote
         public string LocalAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RichNote");
         
         private IniData _settings;
-        private IniData Settings
+        public IniData Settings
         {
             get
             {
