@@ -590,7 +590,7 @@ namespace RichNote
 
             if (appWindow.Presenter is OverlappedPresenter overlappedPresenter)
             {
-                overlappedPresenter.PreferredMinimumWidth = 775;
+                overlappedPresenter.PreferredMinimumWidth = 985;
                 overlappedPresenter.PreferredMinimumHeight = 750;
             }
         }        

@@ -26,6 +26,7 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
     // Initialization
     private RichEditTextDocument document;
     private double zoomFactor = 1.0;
+    private int[] fontSizes = { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 };
 
     public RichTextEditor()
     {
@@ -42,6 +43,18 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
     public TextBox? EditorTextBox => null;
 
     // Event handlers
+    private void RichEditBox_SelectionChanged(object sender, RoutedEventArgs e)
+    {
+        if (document.Selection.CharacterFormat.Size == -9999999f /*tomUndefined*/)
+        {
+            FontSizeBox.Text = "~~";
+        }
+        else
+        {
+            FontSizeBox.Text = document.Selection.CharacterFormat.Size.ToString();
+        }
+    }
+
     private void Bold_Click(object sender, RoutedEventArgs e)
     {
         document.Selection.CharacterFormat.Bold = FormatEffect.Toggle;        
@@ -77,28 +90,41 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
 
     private void FontSizeUp_Click(object sender, RoutedEventArgs e)
     {
-        int selectionStart = document.Selection.StartPosition;
-        int selectionEnd = document.Selection.EndPosition;
+        ChangeFontSize(0, null);
+    }
 
-        for (int i = selectionStart; i < selectionEnd; i++)
+    private void FontSizeBox_SelectionChangedSize(object sender, SelectionChangedEventArgs e)
         {
-            ITextRange character = document.GetRange(i, i + 1);
-            ITextCharacterFormat charFormat = character.CharacterFormat;
-            charFormat.Size += 1;
+        int changeTo = int.Parse(FontSizeBox.SelectedItem.ToString());
+        MyEditorRichEditBox.Focus(FocusState.Programmatic);
+        ChangeFontSize(2, changeTo);
         }  
+
+    private void FontSizeBox_TextSubmittedSize(ComboBox sender, ComboBoxTextSubmittedEventArgs args)
+    {
+        int changeTo = int.Parse(sender.Text);
+        MyEditorRichEditBox.Focus(FocusState.Programmatic);
+        ChangeFontSize(2, changeTo);
     }
 
     private void FontSizeDown_Click(object sender, RoutedEventArgs e)
     {
-        int selectionStart = document.Selection.StartPosition;
-        int selectionEnd = document.Selection.EndPosition;
+        ChangeFontSize(1, null);
+    }
 
-        for (int i = selectionStart; i < selectionEnd; i++)
+    private void AlignLeft_Click(object sender, RoutedEventArgs e)
+    {
+        document.Selection.ParagraphFormat.Alignment = ParagraphAlignment.Left;
+    }
+
+    private void AlignCenter_Click(object sender, RoutedEventArgs e)
         {
-            ITextRange character = document.GetRange(i, i + 1);
-            ITextCharacterFormat charFormat = character.CharacterFormat;
-            charFormat.Size -= 1;
+        document.Selection.ParagraphFormat.Alignment = ParagraphAlignment.Center;
         }
+
+    private void AlignRight_Click(object sender, RoutedEventArgs e)
+    {
+        document.Selection.ParagraphFormat.Alignment = ParagraphAlignment.Right;
     }
 
     private void BulletList_Click(object sender, RoutedEventArgs e)
@@ -153,5 +179,119 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
     private void Redo_Click(object sender, RoutedEventArgs e)
     {
         document.Redo();
+    }
+
+    // Helper methods
+    private void ChangeFontSize(int mode, int? newSize)
+    {
+        ITextRange character;
+        ITextCharacterFormat charFormat;
+        float currentSize;
+
+        switch (mode)
+        {
+            case 0:
+                for (int i = document.Selection.StartPosition; i < document.Selection.EndPosition; i++)
+                {
+                    character = document.GetRange(i, i + 1);
+                    charFormat = character.CharacterFormat;
+                    currentSize = charFormat.Size;
+
+                    if (currentSize >= 72 && currentSize < 80)
+                    {
+                        charFormat.Size = 80;
+                        FontSizeBox.Text = charFormat.Size.ToString();
+                        break;
+                    }
+                    else if (currentSize >= 80 && currentSize % 10 != 0)
+                    {
+                        charFormat.Size = (float)(Math.Ceiling(currentSize / 10.0) * 10);
+                        FontSizeBox.Text = charFormat.Size.ToString();
+                        break;
+                    }
+                    else if (currentSize >= 80)
+                    {
+                        charFormat.Size += 10;
+                        FontSizeBox.Text = charFormat.Size.ToString();
+                        break;
+                    }
+                    else if (currentSize < 8)
+                    {
+                        charFormat.Size += 1;
+                        FontSizeBox.Text = charFormat.Size.ToString();
+                        break;
+                    }
+
+                    int index = Array.BinarySearch(fontSizes, (int)currentSize);
+                    if (index >= 0)
+                    {
+                        charFormat.Size = fontSizes[index + 1];
+                    }
+                    else
+                    {
+                        int insertionPoint = ~index;
+                        charFormat.Size = fontSizes[insertionPoint];
+                    }
+                    FontSizeBox.Text = charFormat.Size.ToString();
+                }
+                break;
+            case 1:
+                for (int i = document.Selection.StartPosition; i < document.Selection.EndPosition; i++)
+                {
+                    character = document.GetRange(i, i + 1);
+                    charFormat = character.CharacterFormat;
+                    currentSize = charFormat.Size;
+
+                    if (currentSize > 72 && currentSize <= 80)
+                    {
+                        charFormat.Size = 72;
+                        FontSizeBox.Text = charFormat.Size.ToString();
+                        break;
+                    }
+                    else if (currentSize >= 80 && currentSize % 10 != 0)
+                    {
+                        charFormat.Size = (float)(Math.Floor(currentSize / 10.0) * 10);
+                        FontSizeBox.Text = charFormat.Size.ToString();
+                        break;
+                    }
+                    else if (currentSize >= 80)
+                    {
+                        charFormat.Size -= 10;
+                        FontSizeBox.Text = charFormat.Size.ToString();
+                        break;
+                    }
+                    else if (currentSize <= 8 && currentSize > 1)
+                    {
+                        charFormat.Size -= 1;
+                        FontSizeBox.Text = charFormat.Size.ToString();
+                        break;
+                    } else if (currentSize == 1)
+                    {
+                        break;
+                    }
+
+                    int index = Array.BinarySearch(fontSizes, (int)currentSize);
+                    if (index >= 0)
+                    {
+                        charFormat.Size = fontSizes[index - 1];
+                    }
+                    else
+                    {
+                        int insertionPoint = ~index;
+                        charFormat.Size = fontSizes[insertionPoint - 1];
+                    }
+                    FontSizeBox.Text = charFormat.Size.ToString();
+                }
+                break;
+            case 2:
+                if (newSize != null)
+                {
+                    document.Selection.CharacterFormat.Size = (float)newSize;
+                    FontSizeBox.Text = document.Selection.CharacterFormat.Size.ToString();
+                }
+                break;
+            default:
+                break;
+        }
     }
 }

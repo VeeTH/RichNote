@@ -44,17 +44,36 @@
                 <AppBarButton
                     Click="NumberList_Click"
                     Icon="List"
-                    ToolTipService.ToolTip="Numbered List (Ctrl+E)">
+                    ToolTipService.ToolTip="Numbered List">
+                </AppBarButton>
+                <AppBarButton
+                    Click="BulletList_Click"
+                    Icon="Bullets"
+                    ToolTipService.ToolTip="Bulleted List">
+                </AppBarButton>
+                <AppBarSeparator/>
+                <AppBarButton
+                    Click="AlignRight_Click"
+                    Icon="AlignRight"
+                    ToolTipService.ToolTip="Align Right (Ctrl+R)">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="R" Modifiers="Control"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+                <AppBarButton
+                    Click="AlignCenter_Click"
+                    Icon="AlignCenter"
+                    ToolTipService.ToolTip="Align Center (Ctrl+E)">
                     <AppBarButton.KeyboardAccelerators>
                         <KeyboardAccelerator Key="E" Modifiers="Control"/>
                     </AppBarButton.KeyboardAccelerators>
                 </AppBarButton>
                 <AppBarButton
-                    Click="BulletList_Click"
-                    Icon="Bullets"
-                    ToolTipService.ToolTip="Bulleted List (Ctrl+Q)">
+                    Click="AlignLeft_Click"
+                    Icon="AlignLeft"
+                    ToolTipService.ToolTip="Align Left (Ctrl+L)">
                     <AppBarButton.KeyboardAccelerators>
-                        <KeyboardAccelerator Key="Q" Modifiers="Control"/>
+                        <KeyboardAccelerator Key="L" Modifiers="Control"/>
                     </AppBarButton.KeyboardAccelerators>
                 </AppBarButton>
                 <AppBarSeparator/>
@@ -66,6 +85,22 @@
                         <KeyboardAccelerator Key="Subtract" Modifiers="Control,Shift"/>
                     </AppBarButton.KeyboardAccelerators>
                 </AppBarButton>
+                <AppBarElementContainer>
+                    <ComboBox
+                        x:Name="FontSizeBox"
+                        Width="75"
+                        Margin="0,7.5,0,0"
+                        AllowFocusOnInteraction="True"
+                        BorderThickness="1"
+                        CornerRadius="0"
+                        FlowDirection="LeftToRight"
+                        IsEditable="True"
+                        IsTextSearchEnabled="False"
+                        ItemsSource="{x:Bind fontSizes}"
+                        SelectionChanged="FontSizeBox_SelectionChangedSize"
+                        TextSubmitted="FontSizeBox_TextSubmittedSize"
+                        ToolTipService.ToolTip="Font Size"/>
+                </AppBarElementContainer>
                 <AppBarButton
                     Click="FontSizeUp_Click"
                     Icon="FontIncrease"
@@ -142,7 +177,9 @@
             ContextFlyout="{StaticResource EditorFlyout}"
             CornerRadius="0"
             DisabledFormattingAccelerators="All"
-            SelectionFlyout="{x:Null}">
+            SelectionChanged="RichEditBox_SelectionChanged"
+            SelectionFlyout="{x:Null}"
+            SelectionHighlightColorWhenNotFocused="{ThemeResource SystemControlHighlightAccentBrush}">
             <RichEditBox.Resources>
                 <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="White"/>
                 <SolidColorBrush x:Key="TextControlBackground" Color="White"/>
