@@ -140,6 +140,9 @@ namespace RichNote.UserControls
             if (parsed["Document"]["DefaultEditor"] != "txt" && parsed["Document"]["DefaultEditor"] != "rtf") {
                 WriteSetting("Document", "DefaultEditor", "txt");
             }
+            if (parsed["Interface"]["ShowStatusBar"] != "true") {
+                Instance.StatusBarToggled?.Invoke(Instance, EventArgs.Empty);
+            }
 
             ToggleSettingVars();
         }
