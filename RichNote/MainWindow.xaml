@@ -30,6 +30,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
@@ -54,8 +55,43 @@
                     Text="RichNote"/>
             </Border>
 
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <StackPanel.RenderTransform>
+                    <TranslateTransform X="12" Y="7.5"/>
+                </StackPanel.RenderTransform>
+                <Button
+                    Margin="0,0,-10,0"
+                    Background="SteelBlue"
+                    BorderThickness="0"
+                    Click="UndoRedo_Click"
+                    Scale="0.75,0.75,0.75"
+                    Tag="Undo"
+                    ToolTipService.ToolTip="Undo (Ctrl+Z)">
+                    <Button.Resources>
+                        <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#FF37739E"/>
+                    </Button.Resources>
+                    <Button.Content>
+                        <FontIcon Glyph="&#xE7A7;"/>
+                    </Button.Content>
+                </Button>
+                <Button
+                    Background="SteelBlue"
+                    BorderThickness="0"
+                    Click="UndoRedo_Click"
+                    Scale="0.75,0.75,0.75"
+                    Tag="Redo"
+                    ToolTipService.ToolTip="Redo (Ctrl+Y)">
+                    <Button.Resources>
+                        <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#FF37739E"/>
+                    </Button.Resources>
+                    <Button.Content>
+                        <FontIcon Glyph="&#xE7A6;"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
             <MenuBar
-                Grid.Column="2"
+                Grid.Column="3"
                 Background="SteelBlue"
                 RequestedTheme="Dark">
                 <MenuBarItem Title="File">

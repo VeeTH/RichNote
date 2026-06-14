@@ -41,23 +41,6 @@
                     </AppBarButton.KeyboardAccelerators>
                 </AppBarButton>
                 <AppBarSeparator/>
-                <AppBarButton
-                    Click="Redo_Click"
-                    Icon="Redo"
-                    ToolTipService.ToolTip="Redo (Ctrl+Y)">
-                    <AppBarButton.KeyboardAccelerators>
-                        <KeyboardAccelerator Key="Y" Modifiers="Control"/>
-                    </AppBarButton.KeyboardAccelerators>
-                </AppBarButton>
-                <AppBarButton
-                    Click="Undo_Click"
-                    Icon="Undo"
-                    ToolTipService.ToolTip="Undo (Ctrl+Z)">
-                    <AppBarButton.KeyboardAccelerators>
-                        <KeyboardAccelerator Key="Z" Modifiers="Control"/>
-                    </AppBarButton.KeyboardAccelerators>
-                </AppBarButton>
-                <AppBarSeparator/>
                 <AppBarElementContainer>
                     <TextBlock
                         Padding="20,10,20,0"

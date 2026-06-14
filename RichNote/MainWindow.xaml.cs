@@ -250,6 +250,42 @@ namespace RichNote
             StandardNewDoc(2, "New Document");            
         }
 
+        private void UndoRedo_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && currentEditor != null)
+            {
+                string clickedTag = button.Tag.ToString();
+
+                switch (clickedTag)
+                {
+                    case "Undo":
+                        if (currentEditor.EditorTextBox != null)
+                        {
+                            currentEditor.EditorTextBox.Undo();
+                        }
+                        else
+                        {
+                            currentEditor.EditorRichEditBox.Document.Undo();
+                        }
+                        break;
+
+                    case "Redo":
+                        if (currentEditor.EditorTextBox != null)
+                        {
+                            currentEditor.EditorTextBox.Redo();
+                        }
+                        else
+                        {
+                            currentEditor.EditorRichEditBox.Document.Redo();
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+
         private void MenuBarItem_AboutClick(object sender, RoutedEventArgs e)
         {
             if (sender is MenuFlyoutItem clickedItem)

@@ -180,16 +180,6 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
         }
     }
 
-    private void Undo_Click(object sender, RoutedEventArgs e)
-    {
-        document.Undo();
-    }
-
-    private void Redo_Click(object sender, RoutedEventArgs e)
-    {
-        document.Redo();
-    }
-
     // Helper methods
     private void ChangeFontSize(int mode, int? newSize)
     {

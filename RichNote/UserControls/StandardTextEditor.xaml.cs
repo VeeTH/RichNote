@@ -58,13 +58,5 @@ public sealed partial class StandardTextEditor : UserControl, IEditorControl
         }
     }
 
-    private void Undo_Click(object sender, RoutedEventArgs e)
-    {
-        editor.Undo();
-    }
 
-    private void Redo_Click(object sender, RoutedEventArgs e)
-    {
-        editor.Redo();
-    }
 }
