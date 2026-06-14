@@ -40,6 +40,10 @@ public sealed partial class StandardTextEditor : UserControl, IEditorControl
         {
             zoomFactor += 0.25;
         editor.RenderTransform = new ScaleTransform { ScaleX = zoomFactor, ScaleY = zoomFactor };
+        } else
+        {
+            User32.MessageBeep((uint)Beep.MB_ICONEXCLAMATION);
+        }
     }
 
     private void ZoomOut_Click(object sender, RoutedEventArgs e)
@@ -48,6 +52,9 @@ public sealed partial class StandardTextEditor : UserControl, IEditorControl
         {
             zoomFactor -= 0.25;
             editor.RenderTransform = new ScaleTransform { ScaleX = zoomFactor, ScaleY = zoomFactor };
+        } else
+        {
+            User32.MessageBeep((uint)Beep.MB_ICONEXCLAMATION);
         }
     }
 

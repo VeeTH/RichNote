@@ -158,6 +158,7 @@ namespace RichNote
                 {
                     ActivityNotif.Title = $"Error saving {args.Tab.Header}!";
                     ActivityNotif.IsOpen = true;
+                    User32.MessageBeep((uint)Beep.MB_ICONERROR);
                 }
             } else if (result == ContentDialogResult.Secondary) 
             {
@@ -524,6 +525,7 @@ namespace RichNote
                     default:
                         ActivityNotif.Title = "File must be a .txt or .rtf file.";
                         ActivityNotif.IsOpen = true;
+                        User32.MessageBeep((uint)Beep.MB_ICONERROR);
                         break;
                 }
             }

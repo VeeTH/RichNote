@@ -160,6 +160,11 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
         {
             zoomFactor += 0.25;
         MyEditorRichEditBox.RenderTransform = new ScaleTransform { ScaleX = zoomFactor, ScaleY = zoomFactor };
+        }
+        else
+        {
+            User32.MessageBeep((uint)Beep.MB_ICONEXCLAMATION);
+        }
     }
 
     private void ZoomOut_Click(object sender, RoutedEventArgs e)
@@ -168,6 +173,10 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
         {
             zoomFactor -= 0.25;
             MyEditorRichEditBox.RenderTransform = new ScaleTransform { ScaleX = zoomFactor, ScaleY = zoomFactor };
+        }
+        else
+        {
+            User32.MessageBeep((uint)Beep.MB_ICONEXCLAMATION);
         }
     }
 
@@ -267,6 +276,7 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
                         break;
                     } else if (currentSize == 1)
                     {
+                        User32.MessageBeep((uint)Beep.MB_ICONEXCLAMATION);
                         break;
                     }
 
