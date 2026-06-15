@@ -176,6 +176,8 @@ namespace RichNote
                 if (selectedTabItem.Content is IEditorControl editorControl)
                 {
                     currentEditor = editorControl;
+                    currentEditor.EditorStateChanged += CurrentEditor_EditorStateChanged;
+                    UpdateStatusBar(currentEditor.GetCurrentState());
                 }
                 else
                 {
@@ -472,6 +474,11 @@ namespace RichNote
             }
         }
 
+        private void CurrentEditor_EditorStateChanged(object? sender, EditorStateChangedEventArgs e)
+        {
+            UpdateStatusBar(e);
+        }
+
         // Helper methods
         private void StandardNewDoc(int format, string tabName)
         { 
@@ -616,6 +623,12 @@ namespace RichNote
             {
                 return ContentDialogResult.None;
             }
+        }
+
+        private void UpdateStatusBar(EditorStateChangedEventArgs e)
+        {
+            LineAndCol.Text = $"Line {e.Line}, Col {e.Column}";
+            PgZoomPcnt.Text = $"Zoom Level: {e.Zoom}";
         }
 
         private void InitializeWindow()

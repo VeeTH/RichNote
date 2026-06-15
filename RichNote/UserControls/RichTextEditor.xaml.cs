@@ -25,13 +25,19 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
 {
     // Initialization
     private RichEditTextDocument document;
+    private string text;
+    private int line = 1;
+    private int column = 1;
     private double zoomFactor = 1.0;
     private int[] fontSizes = { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 };
+    public event EventHandler<EditorStateChangedEventArgs> EditorStateChanged;
+    private EditorStateChangedEventArgs args;
 
     public RichTextEditor()
     {
         InitializeComponent();
         document = MyEditorRichEditBox.Document;
+        args = new EditorStateChangedEventArgs(line, column, zoomFactor);
 
         var format = document.GetDefaultCharacterFormat();
         format.Size = 12f;
@@ -53,6 +59,17 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
         {
             FontSizeBox.Text = document.Selection.CharacterFormat.Size.ToString();
         }
+
+        // Calculate line number
+        document.GetText(TextGetOptions.None, out text);
+        line = text.Substring(0, document.Selection.StartPosition).Split('\r').Length;
+        args.Line = line;
+
+        // Calculate column number
+        column = document.Selection.StartPosition - text.Substring(0, document.Selection.StartPosition).LastIndexOf('\r');
+        args.Column = column;
+
+        EditorStateChanged?.Invoke(this, args);
     }
 
     private void Bold_Click(object sender, RoutedEventArgs e)
@@ -160,6 +177,9 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
         {
             zoomFactor += 0.25;
         MyEditorRichEditBox.RenderTransform = new ScaleTransform { ScaleX = zoomFactor, ScaleY = zoomFactor };
+
+            args.Zoom = zoomFactor.ToString("P0");
+            EditorStateChanged?.Invoke(this, args);
         }
         else
         {
@@ -173,6 +193,9 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
         {
             zoomFactor -= 0.25;
             MyEditorRichEditBox.RenderTransform = new ScaleTransform { ScaleX = zoomFactor, ScaleY = zoomFactor };
+
+            args.Zoom = zoomFactor.ToString("P0");
+            EditorStateChanged?.Invoke(this, args);
         }
         else
         {
@@ -293,5 +316,10 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
             default:
                 break;
         }
+    }
+
+    public EditorStateChangedEventArgs GetCurrentState()
+    {
+        return args;
     }
 }

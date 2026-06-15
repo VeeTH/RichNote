@@ -60,6 +60,7 @@
             BorderThickness="0"
             ContextFlyout="{StaticResource EditorFlyout}"
             CornerRadius="0"
+            SelectionChanged="TextBox_SelectionChanged"
             SelectionFlyout="{StaticResource EditorFlyout}">
             <TextBox.Resources>
                 <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="White"/>
