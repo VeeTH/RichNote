@@ -175,7 +175,15 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
     {
         if (zoomFactor < 5)
         {
+            if (InputKeyboardSource.GetKeyStateForCurrentThread(VirtualKey.Shift).HasFlag(CoreVirtualKeyStates.Down) == true)
+            {
+                zoomFactor = 5;
+            }
+            else
+            {
             zoomFactor += 0.25;
+            }
+
         MyEditorRichEditBox.RenderTransform = new ScaleTransform { ScaleX = zoomFactor, ScaleY = zoomFactor };
 
             args.Zoom = zoomFactor.ToString("P0");
@@ -191,7 +199,15 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
     {
         if (zoomFactor > 1)
         {
+            if (InputKeyboardSource.GetKeyStateForCurrentThread(VirtualKey.Shift).HasFlag(CoreVirtualKeyStates.Down) == true)
+            {
+                zoomFactor = 1;
+            }
+            else
+            {
             zoomFactor -= 0.25;
+            }
+
             MyEditorRichEditBox.RenderTransform = new ScaleTransform { ScaleX = zoomFactor, ScaleY = zoomFactor };
 
             args.Zoom = zoomFactor.ToString("P0");

@@ -1,3 +1,4 @@
+using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -14,6 +15,8 @@ using System.Reflection.Metadata;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
+using Windows.UI.Core;
 
 namespace RichNote.UserControls;
 
@@ -69,7 +72,15 @@ public sealed partial class StandardTextEditor : UserControl, IEditorControl
     {
         if (zoomFactor < 5)
         {
+            if (InputKeyboardSource.GetKeyStateForCurrentThread(VirtualKey.Shift).HasFlag(CoreVirtualKeyStates.Down) == true)
+            {
+                zoomFactor = 5;
+            }
+            else
+            {
             zoomFactor += 0.25;
+            }
+
         editor.RenderTransform = new ScaleTransform { ScaleX = zoomFactor, ScaleY = zoomFactor };
 
             args.Zoom = zoomFactor.ToString("P0");
@@ -84,7 +95,15 @@ public sealed partial class StandardTextEditor : UserControl, IEditorControl
     {
         if (zoomFactor > 1)
         {
+            if (InputKeyboardSource.GetKeyStateForCurrentThread(VirtualKey.Shift).HasFlag(CoreVirtualKeyStates.Down) == true)
+            {
+                zoomFactor = 1;
+            }
+            else
+            {
             zoomFactor -= 0.25;
+            }
+
             editor.RenderTransform = new ScaleTransform { ScaleX = zoomFactor, ScaleY = zoomFactor };
 
             args.Zoom = zoomFactor.ToString("P0");
