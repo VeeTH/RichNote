@@ -193,6 +193,15 @@ namespace RichNote
                 if (currentEditor.EditorTextBox != null)
                 {
                     ToggleWordWrap.Visibility = Visibility.Visible;
+
+                    if (ToggleWordWrap.IsChecked == false)
+                    {
+                        currentEditor.EditorTextBox.TextWrapping = TextWrapping.NoWrap;
+                    }
+                    else
+                    {
+                        currentEditor.EditorTextBox.TextWrapping = TextWrapping.Wrap;
+                    }
                 }
                 else
                 {
