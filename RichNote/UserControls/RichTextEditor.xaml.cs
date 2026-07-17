@@ -25,6 +25,7 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
 {
     // Initialization
     private RichEditTextDocument document;
+    private string filePath;
     private string text;
     private int line = 1;
     private int column = 1;
@@ -47,6 +48,7 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
     public CommandBar EditorCommandBar => MyEditorCommandBar;
     public RichEditBox? EditorRichEditBox => MyEditorRichEditBox;
     public TextBox? EditorTextBox => null;
+    public string? FilePath { get => filePath; set => filePath = value; }
 
     // Event handlers
     private void RichEditBox_SelectionChanged(object sender, RoutedEventArgs e)

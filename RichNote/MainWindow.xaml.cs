@@ -39,7 +39,7 @@ namespace RichNote
         public static MainWindow Instance { get; private set; }
         public IEditorControl currentEditor;
         private ObservableCollection<TabViewItem> tabItems = new ObservableCollection<TabViewItem>();
-        private List<String> openFilePaths = new List<String>();
+        
         public string LocalAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RichNote");
         
         private IniData _settings;
@@ -101,6 +101,7 @@ namespace RichNote
 
                     tabDataList.Add(new TabData
                     {
+                        Path = editorControl.FilePath,
                         Header = item.Header.ToString(),
                         Type = type,
                         Content = content
@@ -226,6 +227,7 @@ namespace RichNote
                 var tabState = BsonSerializer.Deserialize<TabState>(bsonData);
                 foreach (TabData tabData in tabState.Tabs)
                 {
+                    string path = tabData.Path;
                     string header = tabData.Header;
                     string type = tabData.Type;
                     string content = tabData.Content;
@@ -235,11 +237,13 @@ namespace RichNote
                         case "Standard":
                             StandardNewDoc(1, header);
                             currentEditor.EditorTextBox.Text = content;
+                            currentEditor.FilePath = path;
                             break;
 
                         case "Rich":
                             StandardNewDoc(2, header);
                             currentEditor.EditorRichEditBox.Document.SetText(Microsoft.UI.Text.TextSetOptions.FormatRtf, content);
+                            currentEditor.FilePath = path;
                             break;
 
                         default:
@@ -339,7 +343,7 @@ namespace RichNote
                         break;
 
                     case "Save As...":
-                        SaveFile();
+                        SaveAsFile();
                         break;
 
                     case "Settings":
@@ -566,12 +570,14 @@ namespace RichNote
                         StandardNewDoc(1, file.Name);
                         var fileContent = await FileIO.ReadTextAsync(file);
                         currentEditor.EditorTextBox.Text = fileContent;
+                        currentEditor.FilePath = file.Path;
                         break;
 
                     case ".rtf":
                         StandardNewDoc(2, file.Name);
                         var stream = await file.OpenAsync(FileAccessMode.Read);
                         currentEditor.EditorRichEditBox.Document.LoadFromStream(Microsoft.UI.Text.TextSetOptions.FormatRtf, stream);
+                        currentEditor.FilePath = file.Path;
                         break;
 
                     default:
@@ -588,6 +594,39 @@ namespace RichNote
         }
 
         private async Task<ContentDialogResult> SaveFile()
+        {            
+            if (currentEditor.FilePath != null)
+            {
+                StorageFile file = await StorageFile.GetFileFromPathAsync(currentEditor.FilePath);
+                
+                if (file != null)
+                {
+                    switch (file.FileType)
+                    {
+                        case ".txt":
+                            var txtSaveContent = currentEditor.EditorTextBox.Text;
+                            await FileIO.WriteTextAsync(file, txtSaveContent);
+                            break;
+
+                        case ".rtf":
+                            var stream = await file.OpenAsync(FileAccessMode.ReadWrite);
+                            currentEditor.EditorRichEditBox.Document.SaveToStream(Microsoft.UI.Text.TextGetOptions.FormatRtf, stream);
+                            break;
+
+                        default:
+                            break;
+
+                    }
+                }
+
+                return ContentDialogResult.Primary;
+            } else
+            {
+                return await SaveAsFile();
+            }
+        }
+
+        private async Task<ContentDialogResult> SaveAsFile()
         {            
             var saver = new Windows.Storage.Pickers.FileSavePicker();
             WinRT.Interop.InitializeWithWindow.Initialize(saver, WinRT.Interop.WindowNative.GetWindowHandle(this));            
@@ -609,21 +648,20 @@ namespace RichNote
                     case ".txt":
                         var txtSaveContent = currentEditor.EditorTextBox.Text;
                         await FileIO.WriteTextAsync(file, txtSaveContent);
+                        currentEditor.FilePath = file.Path;
+                        ((TabViewItem)DocTabView.SelectedItem).Header = file.Name;
                         break;
 
                     case ".rtf":
                         var stream = await file.OpenAsync(FileAccessMode.ReadWrite);
                         currentEditor.EditorRichEditBox.Document.SaveToStream(Microsoft.UI.Text.TextGetOptions.FormatRtf, stream);
+                        currentEditor.FilePath = file.Path;
+                        ((TabViewItem)DocTabView.SelectedItem).Header = file.Name;
                         break;
 
                     default:                        
                         break;
 
-                }
-
-                if (!openFilePaths.Contains(file.Path))
-                {
-                    openFilePaths.Add(file.Path);
                 }
 
                 return ContentDialogResult.Primary;

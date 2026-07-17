@@ -19,7 +19,6 @@ I decided to create RichNote due to my experiences with the Windows 11 Notepad. 
 
 ### To-do features
 * Status bar (line break type and encoding)
-* File path tracking
 * External file handling (file association, command line argument)
 * Support for more formats (non-txt plain text files, maybe doc/docx)
 * Clipboard history

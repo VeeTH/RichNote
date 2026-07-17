@@ -24,6 +24,7 @@ public sealed partial class StandardTextEditor : UserControl, IEditorControl
 {
     // Initialization
     private TextBox editor;
+    private string filePath;
     private string text;
     private int line = 1;
     private int column = 1;
@@ -41,6 +42,7 @@ public sealed partial class StandardTextEditor : UserControl, IEditorControl
     public CommandBar EditorCommandBar => MyEditorCommandBar;
     public RichEditBox? EditorRichEditBox => null;
     public TextBox? EditorTextBox => MyEditorTextBox;
+    public string? FilePath { get => filePath; set => filePath = value; }
 
     // Event handlers
     private void TextBox_SelectionChanged(object sender, RoutedEventArgs e)

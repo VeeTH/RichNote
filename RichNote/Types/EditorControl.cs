@@ -8,6 +8,7 @@ namespace RichNote.Types
         CommandBar EditorCommandBar { get; }
         RichEditBox? EditorRichEditBox { get; }
         TextBox? EditorTextBox { get; }
+        string? FilePath { get; set; }
 
         event EventHandler<EditorStateChangedEventArgs> EditorStateChanged;
         EditorStateChangedEventArgs GetCurrentState();
