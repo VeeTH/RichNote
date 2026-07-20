@@ -564,6 +564,15 @@ namespace RichNote
         OpenFile:
             if (file != null)
             {
+                foreach (TabViewItem item in tabItems)
+                {
+                    if (item.Content is IEditorControl editor && editor.FilePath == file.Path)
+                    {
+                        DocTabView.SelectedItem = item;
+                        return;
+                    }
+                }
+
                 switch (file.FileType)
                 {
                     case ".txt":
