@@ -37,7 +37,7 @@
                 <TabViewItem.Content>
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock VerticalAlignment="Center" Text="Autosave documents on close"/>
+                            <TextBlock VerticalAlignment="Center" Text="Autosave workspace on close"/>
                             <ToggleSwitch
                                 x:Name="AutosaveOnClose"
                                 FlowDirection="RightToLeft"
@@ -46,7 +46,7 @@
                                 Toggled="SettingHandler"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock VerticalAlignment="Center" Text="Autoload documents on open"/>
+                            <TextBlock VerticalAlignment="Center" Text="Autoload workspace on open"/>
                             <ToggleSwitch
                                 x:Name="AutoloadOnOpen"
                                 FlowDirection="RightToLeft"

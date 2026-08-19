@@ -45,6 +45,17 @@ namespace RichNote.UserControls
                 {
                     case "1 1":
                         WriteSetting("Document", "AutosaveOnClose", toggledSwitch.IsOn.ToString().ToLower());
+                        
+                        if (toggledSwitch.IsOn == false)
+                        {
+                            WriteSetting("Document", "AutoloadOnOpen", "false");
+                            AutoloadOnOpen.IsOn = false;
+                            AutoloadOnOpen.IsEnabled = false;
+                        } else
+                        {
+                            AutoloadOnOpen.IsEnabled = true;
+                        }
+
                         break;
 
                     case "1 2":
