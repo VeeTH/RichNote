@@ -114,16 +114,26 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
 
     private void FontSizeBox_SelectionChangedSize(object sender, SelectionChangedEventArgs e)
         {
-        int changeTo = int.Parse(FontSizeBox.SelectedItem.ToString());
+        if (int.TryParse(FontSizeBox.SelectedItem.ToString(), out int changeTo) && changeTo > 0)
+        {
         MyEditorRichEditBox.Focus(FocusState.Programmatic);
         ChangeFontSize(2, changeTo);
+        } else
+        {
+            User32.MessageBeep((uint)Beep.MB_ICONEXCLAMATION);
+        }
         }  
 
     private void FontSizeBox_TextSubmittedSize(ComboBox sender, ComboBoxTextSubmittedEventArgs args)
     {
-        int changeTo = int.Parse(sender.Text);
+        if (int.TryParse(sender.Text, out int changeTo) && changeTo > 0)
+        {
         MyEditorRichEditBox.Focus(FocusState.Programmatic);
         ChangeFontSize(2, changeTo);
+        } else
+        {
+            User32.MessageBeep((uint)Beep.MB_ICONEXCLAMATION);
+        }
     }
 
     private void FontSizeDown_Click(object sender, RoutedEventArgs e)
