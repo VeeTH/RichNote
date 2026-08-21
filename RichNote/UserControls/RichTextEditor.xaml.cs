@@ -11,6 +11,7 @@ using Microsoft.UI.Xaml.Navigation;
 using RichNote.Types;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -31,6 +32,8 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
     private int column = 1;
     private double zoomFactor = 1.0;
     private int[] fontSizes = { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 };
+    private string[] fontFamilies = MainWindow.Instance.systemFonts;
+    private ObservableCollection<string> recentFontFamilies = MainWindow.Instance.recentFonts;
     public event EventHandler<EditorStateChangedEventArgs> EditorStateChanged;
     private EditorStateChangedEventArgs args;
 
@@ -60,6 +63,15 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
         else
         {
             FontSizeBox.Text = document.Selection.CharacterFormat.Size.ToString();
+        }
+
+        if (document.Selection.CharacterFormat.Name == null)
+        {
+            FontFamilyBox.Content = "~~";
+        }
+        else
+        {
+            FontFamilyBox.Content = document.Selection.CharacterFormat.Name;
         }
 
         // Calculate line number
@@ -102,9 +114,33 @@ public sealed partial class RichTextEditor : UserControl, IEditorControl
         document.Selection.CharacterFormat.Strikethrough = FormatEffect.Toggle;
     }
 
-    private void ChangeFont_Click(object sender, RoutedEventArgs e)
+    private void FontFamilyLists_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        // Use Win2D GetSystemFontFamilies() to list all installed fonts
+        if (((ListView)sender).SelectedItem == null)
+        {
+            return;
+        }
+
+        string selFont = fontFamilies.First(f => f == ((ListView)sender).SelectedItem.ToString());
+        document.Selection.CharacterFormat.Name = selFont;
+        FontFamilyBox.Content = selFont;
+
+        if (sender.Equals(FontFamilyList))
+        {
+            if (recentFontFamilies.Contains(selFont))
+            {
+                recentFontFamilies.Remove(selFont);
+                recentFontFamilies.Insert(0, selFont);
+            }
+            else
+            {
+                recentFontFamilies.Insert(0, selFont);
+            }
+            if (recentFontFamilies.Count > 5)
+    {
+                recentFontFamilies.RemoveAt(5);
+            }
+        }
     }
 
     private void FontSizeUp_Click(object sender, RoutedEventArgs e)

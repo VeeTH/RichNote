@@ -109,7 +109,88 @@
                         <KeyboardAccelerator Key="Add" Modifiers="Control"/>
                     </AppBarButton.KeyboardAccelerators>
                 </AppBarButton>
-                <AppBarButton Icon="Font" ToolTipService.ToolTip="Font"/>
+                <AppBarElementContainer>
+                    <DropDownButton
+                        x:Name="FontFamilyBox"
+                        Width="200"
+                        Height="32"
+                        Margin="0,7.5,0,0"
+                        HorizontalContentAlignment="Left"
+                        AllowFocusOnInteraction="True"
+                        BorderThickness="1"
+                        CornerRadius="0"
+                        FlowDirection="LeftToRight"
+                        ToolTipService.ToolTip="Font">
+                        <DropDownButton.Flyout>
+                            <Flyout Placement="Bottom">
+                                <Flyout.FlyoutPresenterStyle>
+                                    <Style TargetType="FlyoutPresenter">
+                                        <Setter Property="Padding" Value="0"/>
+                                        <Setter Property="Margin" Value="0,-4,0,0"/>
+                                        <Setter Property="CornerRadius" Value="10"/>
+                                        <Setter Property="MaxHeight" Value="700"/>
+                                    </Style>
+                                </Flyout.FlyoutPresenterStyle>
+                                <StackPanel Width="200">
+                                    <TextBlock
+                                        Margin="5,10,0,0"
+                                        Style="{StaticResource CaptionTextBlockStyle}"
+                                        Text="Recent Fonts"/>
+                                    <ListView
+                                        x:Name="RecentFontFamilyList"
+                                        MaxHeight="140"
+                                        Padding="0,10,0,0"
+                                        ItemsSource="{x:Bind recentFontFamilies, Mode=OneWay}"
+                                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                        SelectionChanged="FontFamilyLists_SelectionChanged">
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="ListViewItem">
+                                                <Setter Property="Margin" Value="0,-12,0,0"/>
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate x:DataType="x:String">
+                                                <TextBlock
+                                                    FontFamily="{x:Bind}"
+                                                    Text="{x:Bind}"
+                                                    ToolTipService.ToolTip="{x:Bind}"/>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                    <TextBlock
+                                        Margin="5,10,0,0"
+                                        Style="{StaticResource CaptionTextBlockStyle}"
+                                        Text="All Fonts"/>
+                                    <ListView
+                                        x:Name="FontFamilyList"
+                                        MaxHeight="410"
+                                        Padding="0,10,0,0"
+                                        ItemsSource="{x:Bind fontFamilies}"
+                                        ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                        SelectionChanged="FontFamilyLists_SelectionChanged">
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="ListViewItem">
+                                                <Setter Property="Margin" Value="0,-12,0,0"/>
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate x:DataType="x:String">
+                                                <TextBlock
+                                                    FontFamily="{x:Bind}"
+                                                    Text="{x:Bind}"
+                                                    ToolTipService.ToolTip="{x:Bind}"/>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                    <Button
+                                        Margin="0,10,0,10"
+                                        HorizontalAlignment="Center"
+                                        Content="Set Default Font Style..."/>
+                                </StackPanel>
+                            </Flyout>
+                        </DropDownButton.Flyout>
+                    </DropDownButton>
+                </AppBarElementContainer>
                 <AppBarSeparator/>
                 <AppBarButton Click="Strikethrough_Click" ToolTipService.ToolTip="Strikethrough">
                     <AppBarButton.Icon>

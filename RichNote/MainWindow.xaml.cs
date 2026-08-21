@@ -39,7 +39,8 @@ namespace RichNote
         public static MainWindow Instance { get; private set; }
         public IEditorControl currentEditor;
         private ObservableCollection<TabViewItem> tabItems = new ObservableCollection<TabViewItem>();
-        
+        public string[] systemFonts;
+        public ObservableCollection<string> recentFonts = new ObservableCollection<string>();
         public string LocalAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RichNote");
         
         private IniData _settings;
@@ -63,6 +64,10 @@ namespace RichNote
             ExtendsContentIntoTitleBar = true;          
             SetTitleBar(AppTitleBar);
             Instance = this;
+
+            systemFonts = CanvasTextFormat.GetSystemFontFamilies()
+                                          .OrderBy(f => f)
+                                          .ToArray();  
 
             if (!Directory.Exists(LocalAppData))
             {
